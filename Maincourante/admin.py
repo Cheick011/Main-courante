@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+import sys
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication
 
 class AdminPage(QWidget):
     def __init__(self):
@@ -8,3 +9,10 @@ class AdminPage(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(QLabel("Bienvenue Admin !"))
         self.setLayout(layout)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = AdminPage()
+    window.show()
+    sys.exit(app.exec_())
