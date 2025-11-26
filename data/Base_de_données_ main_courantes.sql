@@ -27,7 +27,6 @@ CREATE TABLE donnees (
 
 
 
-
 -- rôle de base : ne peut que lire
 CREATE ROLE lecteur;
 
@@ -47,6 +46,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
