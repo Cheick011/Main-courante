@@ -103,7 +103,7 @@ class LoginWindow(QWidget):
         warning.setStyleSheet("color: #ff7777;")
         inner_layout.addWidget(warning)
 
-def login(self):
+    def login(self):
         user = self.username.text()
         pwd = self.password.text()
 
@@ -112,9 +112,10 @@ def login(self):
                 dbname="spelo_app",
                 user="admin",
                 password="admin",
-                host="localhost",
-                port="5432"
+                host="localhost"
+                
             )
+            conn.autocommit = True
             cursor = conn.cursor(cursor_factory=DictCursor)
         except Exception as e:
             QMessageBox.critical(self, "Erreur DB", f"Impossible de se connecter : {e}")
@@ -123,6 +124,9 @@ def login(self):
         query = "SELECT role FROM utilisateurs WHERE nom_utilisateur=%s AND mot_de_passe=%s"
         cursor.execute(query, (user, pwd))
         result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
 
         if not result:
             QMessageBox.warning(self, "Erreur", "Identifiant ou mot de passe incorrect")
