@@ -37,7 +37,7 @@ class GestionPage(QMainWindow):
        
         
         self.__titre= QLabel("Application spéléo-sauvetage")
-        self.__spéléologues=QLabel("Page spéléologues")
+        self.__spéléologues=QLabel("Page gestionnaire")
         self.__Déconnecter=QPushButton("Déconnecter")
         
         self.__bloc_haut_lay.addWidget(self.__titre)
