@@ -1,3 +1,4 @@
+
 sudo -i -u postgres
 psql
 
@@ -57,6 +58,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
