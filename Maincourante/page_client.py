@@ -22,6 +22,18 @@ class GestionPage(QMainWindow):
         self.setWindowTitle(GestionPage.TITRE_FENETRE)
         self.resize(900, 600)
         
+        self.__menuBar = QMenuBar()
+        self.setMenuBar(self.__menuBar)
+        
+        self.__help = self.__menuBar.addMenu('&Apropos')
+        
+        self.__action_apropos = QAction(QIcon('actions/stock_search.png'), 'A propos', self)
+        #self.__action_apropos.setStatusTisp("A propos")
+        
+        self.__help.addAction(self.__action_apropos)
+        
+        self.__action_apropos.triggered.connect(self.a_propos)
+        
         #creation  bloc général
         self.__bloc_général = QWidget() 
         self.__bloc_général_lay = QVBoxLayout()
@@ -68,16 +80,6 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
         self.__bloc_tableau_conteneur_lay.addStretch()
         
-        self.__bloc_bas = QGroupBox() 
-        self.__bloc_bas_lay = QHBoxLayout()
-        self.__bloc_bas.setLayout(self.__bloc_bas_lay)    
-        self.__bloc_général_lay.addWidget(self.__bloc_bas) 
-       
-        self.__copyright= QLabel("Copyright BUT2 R&T")
-        
-        self.__bloc_bas_lay.addStretch()
-        self.__bloc_bas_lay.addWidget(self.__copyright)
-        self.__bloc_bas_lay.addStretch()
 
 def main():
     application = QApplication(sys.argv)
