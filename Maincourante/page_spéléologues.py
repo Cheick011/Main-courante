@@ -14,8 +14,8 @@ from PyQt5.QtGui import QIcon, QKeySequence
 
 class GestionPage(QMainWindow):
     TITRE_FENETRE = "Main courante"
-  
-    def __init__(self): 
+
+  def __init__(self): 
         super().__init__()
 
         # paramétrage de la fenêtre
@@ -79,7 +79,10 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau_conteneur_lay.addStretch()
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
         self.__bloc_tableau_conteneur_lay.addStretch()
-        
+
+  def a_propos(self):
+            
+      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 
 def main():
     application = QApplication(sys.argv)
