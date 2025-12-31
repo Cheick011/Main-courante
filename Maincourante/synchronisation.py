@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: synchronisation
+   :platform: Unix, windows
+   :synopsis: module pour synchroniser la base de donnée d'une machine avec les autres dans le multiast en cas de demarrage ou d'interruption pour avoir un contenu coherent.
+
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
+
+
+"""
+
 from Connexion_dataBase import connexion
 
 class SyncManager:
