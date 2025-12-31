@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: communication
+   :platform: Unix, windows
+   :synopsis: module pour manager la communication avec les autres machines du réseau multicast
+
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
+
+
+"""
+
 from .synchronisation import SyncManager
 from .multicast import MulticastReceiver, MulticastSender
 
