@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: notification
+   :platform: Unix, windows
+   :synopsis: module pour notifier le poste à la reception de nouveau message.
+
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
+
+
+"""
+
 import platform
 import subprocess
 
