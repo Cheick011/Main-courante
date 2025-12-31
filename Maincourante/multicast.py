@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: mutlicast
+   :platform: Unix, windows
+   :synopsis: module pour la multidiffusion des informations entre les postes, l'envoie et la reception.
+
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
+
+
+"""
+
 import socket
 import struct
 import json
