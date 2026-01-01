@@ -50,8 +50,7 @@ class MainCourante(QMainWindow):
         self.__gestionnaire=QLabel("Page gestionnaire")
         self.__Déconnecter=QPushButton("Déconnecter")
         
-        
-        #Partie Marème
+    
         
        #connexion du bouton à la fonction de deconnexion
        
@@ -84,8 +83,7 @@ class MainCourante(QMainWindow):
         self.__bloc_tableau_conteneur_lay.addStretch()
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
         self.__bloc_tableau_conteneur_lay.addStretch()
-        
-        #Partie Marème
+    
     def deconnecter(self):
         
         #creer un message de confirmation pour la deconnexion
