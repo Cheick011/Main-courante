@@ -73,7 +73,7 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau.setHorizontalHeaderLabels(["Heure", "De", "À", "Description"])
         self.__bloc_tableau.verticalHeader().setVisible(False)
         self.__bloc_tableau.setFixedSize(600,380)
-        #self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.__bloc_tableau.setEditTriggers( QTableWidget.NoEditTriggers)
         
         # stretch permet de placer le tableu au centre, on ajoute le tableau au layout du conteneur
         self.__bloc_tableau_conteneur_lay.addStretch()
