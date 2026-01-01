@@ -11,8 +11,9 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
 from PyQt5.QtGui import QIcon, QKeySequence
 
-class MainCourante(QMainWindow):
+class GestionPage(QMainWindow):
     TITRE_FENETRE = "Main courante"
+    TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
   
     def __init__(self): 
         super().__init__()
@@ -48,8 +49,9 @@ class MainCourante(QMainWindow):
         
         self.__titre= QLabel("Application spéléo-sauvetage")
         self.__gestionnaire=QLabel("Page gestionnaire")
-        self.__Déconnecter=QPushButton("Déconnecter")
-        
+        self.__Déconnecter=QPushButton("Déconnexion")
+
+         self.__Déconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
     
         
        #connexion du bouton à la fonction de deconnexion
@@ -98,8 +100,8 @@ class MainCourante(QMainWindow):
 
 def main():
     application = QApplication(sys.argv)
-    mon_appli = MainCourante()
-    mon_appli.show()
+    window = GestionPage()
+    window.show()
     sys.exit(application.exec_())
 
 if __name__ == '__main__':
