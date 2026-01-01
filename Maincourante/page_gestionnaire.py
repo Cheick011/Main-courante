@@ -51,7 +51,8 @@ class GestionPage(QMainWindow):
         self.__gestionnaire=QLabel("Page gestionnaire")
         self.__Déconnecter=QPushButton("Déconnexion")
 
-         self.__Déconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
+        self.__Déconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
+        self.__Déconnecter.setStyleSheet("background-color: violet; color: white")
     
         
        #connexion du bouton à la fonction de deconnexion
@@ -61,6 +62,8 @@ class GestionPage(QMainWindow):
         self.__bloc_haut_lay.addWidget(self.__titre)
         self.__bloc_haut_lay.addWidget(self.__gestionnaire)
         self.__bloc_haut_lay.addWidget(self.__Déconnecter)
+        self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white;")
+
         
         # création d’un bloc pour centrer le tableau
         self.__bloc_tableau_conteneur = QWidget()
