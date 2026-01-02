@@ -41,8 +41,8 @@ class GestionPage(QMainWindow):
         
         
         self.__action_apropos.triggered.connect(self.a_propos)
-        self.__action_apropos.triggered.connect(self.add_line)
-        self.__action_apropos.triggered.connect(self.save_modif)
+        self.__action_add_line.triggered.connect(self.add_line)
+        self.__action_save.triggered.connect(self.save_modif)
         
         
         #creation  bloc général
