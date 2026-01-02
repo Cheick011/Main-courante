@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBa
 from PyQt5.QtGui import QIcon, QKeySequence
 
 class GestionPage(QMainWindow):
-    TITRE_FENETRE = "Main courante"
+    TITRE_FENETRE = "Page spéléologues"
 
   def __init__(self): 
         super().__init__()
