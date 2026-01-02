@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBa
 from PyQt5.QtGui import QIcon, QKeySequence
 
 class GestionPage(QMainWindow):
-    TITRE_FENETRE = "Main courante"
+    TITRE_FENETRE = "Page gestionnaire"
     TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
   
     def __init__(self): 
