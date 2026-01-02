@@ -107,7 +107,7 @@ class GestionPage(QMainWindow):
        
 
     def a_propos(self):       
-      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
+      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
     def  add_line(self):
         pass
