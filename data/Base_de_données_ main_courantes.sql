@@ -6,6 +6,8 @@ des rôles (lecteur, gestionnaire, admin) et attribution
 des droits d’accès associés.
 
 Script destiné à un usage pédagogique.
+    
+ .. moduleauthor:: Gatlin ALLOHO <gatlin.alloho@etu.univ-poitiers.fr>
 """
     
 sudo -i -u postgres
@@ -67,6 +69,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
