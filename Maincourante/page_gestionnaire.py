@@ -14,7 +14,7 @@ from PyQt5.QtGui import QIcon, QKeySequence
 class GestionPage(QMainWindow):
     TITRE_FENETRE = "Page gestionnaire"
     TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
-    TOOLTIP_BOUTON_AC = "Accéder aux dernières mises à jour" 
+
   
     def __init__(self): 
         super().__init__()
@@ -60,21 +60,15 @@ class GestionPage(QMainWindow):
        
         
         self.__titre= QLabel("Profil: Gestionnaire")
-        self.__Actualiser=QPushButton("Actualiser")
-        self.__Deconnecter=QPushButton("Déconnecter")
+        self.__Deconnecter=QPushButton("Déconnexion")
         
         self.__Deconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
         self.__Deconnecter.clicked.connect(self.deconnecter)
         
-
-        self.__Actualiser.setToolTip(GestionPage.TOOLTIP_BOUTON_AC)
-        self.__Actualiser.setStyleSheet("background-color: violet; color: white")
-        self.__Actualiser.setFixedSize(120, 30)
         
         self.__bloc_haut_lay.addWidget(self.__titre)
-        self.__bloc_haut_lay.addWidget(self.__Actualiser)
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
         self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white;")
         
