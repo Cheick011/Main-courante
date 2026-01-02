@@ -1,4 +1,13 @@
+"""
+Initialisation de la base de données PostgreSQL de l’application Spelo.
 
+Création de la base, des tables (utilisateurs, donnees),
+des rôles (lecteur, gestionnaire, admin) et attribution
+des droits d’accès associés.
+
+Script destiné à un usage pédagogique.
+"""
+    
 sudo -i -u postgres
 psql
 
@@ -58,6 +67,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
