@@ -28,8 +28,7 @@ class GestionPage(QMainWindow):
         
         self.__help = self.__menuBar.addMenu('&Apropos')
         self.__seetings = self.__menuBar.addMenu('&Parametres')
-        
-        
+
         
         self.__action_apropos = QAction(QIcon('actions/stock_search.png'), 'A propos', self)
         self.__action_add_line = QAction(QIcon('actions/list-add.png'), 'Ajouter une ligne', self)
@@ -44,6 +43,7 @@ class GestionPage(QMainWindow):
         self.__action_apropos.triggered.connect(self.a_propos)
         self.__action_apropos.triggered.connect(self.add_line)
         self.__action_apropos.triggered.connect(self.save_modif)
+        
         
         #creation  bloc général
         self.__bloc_general = QWidget() 
