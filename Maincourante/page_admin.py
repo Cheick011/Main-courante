@@ -63,6 +63,22 @@ class AdminPage(QMainWindow):
        
         self.__create_user=QPushButton("Créer l'utilisateur")
         self.__bloc_create_users_lay.addWidget(self.__create_user)
+       
+        self.__bloc_gestion_droits = QGroupBox("Gestion des droits d'utilisateurs") 
+        self.__bloc_gestion_droits_lay = QFormLayout()
+        self.__bloc_gestion_droits.setLayout(self.__bloc_gestion_droits_lay)    
+        self.__bloc_general_lay.addWidget(self.__bloc_gestion_droits)
+        
+        self.__label_adja = QLabel("Adja")
+        self.__label_cheikh = QLabel("Cheikh")
+        
+        self.__combobox_adja= QComboBox()
+        self.__combobox_adja.addItems(["lecture", "gestion", "admin" ])
+        self.__combobox_cheikh= QComboBox()
+        self.__combobox_cheikh.addItems(["lecture", "gestion", "admin" ])
+        
+        self.__bloc_gestion_droits_lay.addRow(self.__label_adja, self.__combobox_adja)
+        self.__bloc_gestion_droits_lay.addRow(self.__label_cheikh, self.__combobox_cheikh)
 
 
 
