@@ -66,7 +66,7 @@ class GestionPage(QMainWindow):
         self.__Deconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
-        self.bouton_Deconnecter.clicked.connect(self.deconnecter)
+        self.__Deconnecter.clicked.connect(self.deconnecter)
         
 
         self.__Actualiser.setToolTip(GestionPage.TOOLTIP_BOUTON_AC)
