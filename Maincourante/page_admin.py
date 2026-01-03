@@ -18,6 +18,22 @@ class AdminPage(QMainWindow):
         
         self.setWindowTitle("Page Admin")
         self.resize(900, 600)
+         
+        #Definition barre de menu
+        self.__menuBar = QMenuBar()
+        self.setMenuBar(self.__menuBar)
+        
+        self.__help = self.__menuBar.addMenu('&Apropos')
+        
+        #création des actions  
+        self.__action_apropos = QAction(QIcon('actions/stock_search.png'),'A propos', self)
+
+        
+        self.__help.addAction(self.__action_apropos)
+        
+        self.__action_apropos.triggered.connect(self.a_propos)
+        
+        #création du bloc général
         
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
@@ -84,10 +100,12 @@ class AdminPage(QMainWindow):
         self.__label_adja = QLabel("Adja")
         self.__combobox_adja= QComboBox()
         self.__combobox_adja.addItems(["lecture", "gestion", "admin" ])
+       
         self.__bouton_supp_adja= QPushButton()
         self.__bouton_supp_adja.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
         self.__bouton_supp_adja.setFixedSize(30, 30)
         self.__bouton_supp_adja.setToolTip("Supprimer cet utilisateur")
+        self.__bouton_supp_adja.setStyleSheet("background-color: transparent")
         
         self.__user_adja_lay.addWidget(self.__label_adja)
         self.__user_adja_lay.addWidget(self.__combobox_adja)
@@ -107,6 +125,8 @@ class AdminPage(QMainWindow):
         self.__bouton_supp_cheikh.setFixedSize(30, 30)
         self.__bouton_supp_cheikh.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
         self.__bouton_supp_cheikh.setToolTip("Supprimer cet utilisateur")
+        self.__bouton_supp_cheikh.setStyleSheet("background-color: transparent")
+        
         
         self.__user_cheikh_lay.addWidget(self.__label_cheikh)
         self.__user_cheikh_lay.addWidget(self.__combobox_cheikh)
@@ -126,6 +146,7 @@ class AdminPage(QMainWindow):
         self.__bouton_supp_gatlin.setFixedSize(30, 30)
         self.__bouton_supp_gatlin.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
         self.__bouton_supp_gatlin.setToolTip("Supprimer cet utilisateur")
+        self.__bouton_supp_gatlin.setStyleSheet("background-color: transparent")
         
         self.__user_gatlin_lay.addWidget(self.__label_gatlin)
         self.__user_gatlin_lay.addWidget(self.__combobox_gatlin)
@@ -151,6 +172,8 @@ class AdminPage(QMainWindow):
       pass
     def creer_utilisateur(self):
       pass
+    def a_propos(self):          
+      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
