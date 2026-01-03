@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication
 class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
     TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
-    TOOLTIP_BOUTON_GES = "Accéder à la page gestionnaires"
+    TOOLTIP_BOUTON_GES = "Accéder à la page gestionnaire"
     
     def __init__(self):
         super().__init__()
@@ -48,7 +48,7 @@ class AdminPage(QMainWindow):
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
         self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white")
         
-        self.__bloc_create_users = QGroupBox("Création des compte utilisateurs") 
+        self.__bloc_create_users = QGroupBox("Création des comptes utilisateurs") 
         self.__bloc_create_users_lay = QFormLayout()
         self.__bloc_create_users.setLayout(self.__bloc_create_users_lay)    
         self.__bloc_general_lay.addWidget(self.__bloc_create_users)
