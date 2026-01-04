@@ -119,7 +119,7 @@ class GestionPage(QMainWindow):
         #creer un message de confirmation pour la deconnexion
         reply = QMessageBox.question(self, 'Déconnexion','Voulez-vous vraiment vous déconnecter?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-        #Si l'utilisateur confirme,ferme la fenetre
+        #Si l'utilisateur confirme, ferme la fenetre
             self.close()
      
 
