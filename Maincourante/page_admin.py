@@ -9,6 +9,7 @@ from PyQt5.QtGui import QIcon, QKeySequence
        # layout = QVBoxLayout()
      #   layout.addWidget(QLabel("Bienvenue Admin !"))
       #  self.setLayout(layout)
+
 class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
     TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
