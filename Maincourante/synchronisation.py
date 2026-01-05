@@ -14,8 +14,24 @@
 from Connexion_dataBase import connexion
 
 class SyncManager:
+   """
+    Gestionnaire de synchronisation des données entre les nœuds.
+
+    Cette classe permet d'appliquer des mises à jour partielles (ajout, mise à jour, suppression)
+    des données locales ainsi que d'effectuer une synchronisation complète avec les autres machines.
+    """
 
     def apply_update(self, msg):
+       """
+        Applique une mise à jour locale en fonction de l'action reçue (ajout, mise à jour, suppression).
+
+        Cette méthode traite les messages multicast et applique les modifications à la base de données locale
+        dans la table ``donnees``.
+
+        :param msg: Message reçu contenant les détails de l'action à appliquer.
+        :type msg: dict
+        :raises Exception: Si une erreur se produit lors de l'application de la mise à jour.
+        """
         action = msg["action"]
         table = msg["table"]
         payload = msg["payload"]
@@ -58,6 +74,16 @@ class SyncManager:
         conn.close()
 
     def apply_full_sync(self, data):
+       """
+        Applique une synchronisation complète des données locales avec celles des autres nœuds.
+
+        Cette méthode efface toutes les données locales dans les tables ``utilisateurs`` et ``donnees``
+        et les remplace par celles reçues d'un autre nœud, assurant ainsi une cohérence complète entre les machines.
+
+        :param data: Données à synchroniser, comprenant les tables ``utilisateurs`` et ``donnees``.
+        :type data: dict
+        :raises Exception: Si une erreur se produit lors de l'application de la synchronisation.
+        """
         conn = connexion()
         cur = conn.cursor()
 
