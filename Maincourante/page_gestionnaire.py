@@ -3,7 +3,7 @@
 """
 version Nov 12 09:51:19 2025
 
-@author: adja
+@author: 
 
 """
 
