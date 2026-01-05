@@ -16,7 +16,7 @@ from .multicast import MulticastReceiver, MulticastSender
 
 
 class CommunicationModule:
-   """
+    """
     Module de communication réseau basé sur le multicast.
 
     Cette classe centralise la gestion des communications réseau,
@@ -25,7 +25,7 @@ class CommunicationModule:
     """
 
     def __init__(self):
-       """
+        """
         Initialise le module de communication.
 
         Crée une instance de gestion de synchronisation ainsi qu’un
@@ -35,7 +35,7 @@ class CommunicationModule:
         self.receiver = MulticastReceiver(self.sync)
 
     def start(self):
-       """
+        """
         Démarre le module de communication.
 
         Lance le récepteur multicast afin de commencer l’écoute
@@ -45,7 +45,7 @@ class CommunicationModule:
         print(" Module de communication démarré")
 
     def send_update(self, action, table, payload):
-       """
+        """
         Envoie une mise à jour via le réseau multicast.
 
         :param action: Type d'action à effectuer (ex. ``INSERT``, ``UPDATE``, ``DELETE``).
@@ -58,7 +58,7 @@ class CommunicationModule:
         MulticastSender.send_update(action, table, payload)
 
     def request_full_sync(self):
-       """
+        """
         Demande une synchronisation complète des données.
 
         Envoie une requête multicast afin de déclencher un envoi
