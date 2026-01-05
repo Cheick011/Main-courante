@@ -23,7 +23,7 @@ from .synchronisation import SyncManager
 
 
 class MulticastSender:
-   """
+    """
     Classe utilitaire pour l'envoi de messages en multicast.
 
     Cette classe fournit des méthodes statiques permettant
@@ -43,7 +43,7 @@ class MulticastSender:
 
     @staticmethod
     def send_message(msg_dict):
-       """
+        """
         Envoie un message multicast brut.
 
         :param msg_dict: Message à envoyer sous forme de dictionnaire.
@@ -56,7 +56,7 @@ class MulticastSender:
 
     @staticmethod
     def send_update(action, table, payload):
-       """
+        """
         Envoie une mise à jour de données aux autres nœuds.
 
         :param action: Type d'action (``INSERT``, ``UPDATE``, ``DELETE``).
@@ -75,7 +75,7 @@ class MulticastSender:
 
     @staticmethod
     def request_full_sync():
-       """
+        """
         Envoie une requête de synchronisation complète.
 
         Cette requête demande aux autres nœuds du réseau
@@ -85,7 +85,7 @@ class MulticastSender:
 
     @staticmethod
     def send_full_sync_data(data):
-       """
+        """
         Envoie les données complètes pour une synchronisation globale.
 
         :param data: Ensemble des données à synchroniser.
@@ -98,7 +98,7 @@ class MulticastSender:
 
 
 class MulticastReceiver(threading.Thread):
-   """
+    """
     Récepteur multicast exécuté dans un thread dédié.
 
     Cette classe écoute en continu les messages multicast,
@@ -107,7 +107,7 @@ class MulticastReceiver(threading.Thread):
     """
 
     def __init__(self, sync_manager: SyncManager):
-       """
+        """
         Initialise le récepteur multicast.
 
         :param sync_manager: Gestionnaire de synchronisation des données.
@@ -117,7 +117,7 @@ class MulticastReceiver(threading.Thread):
         self.sync_manager = sync_manager
 
     def run(self):
-       """
+        """
         Lance la boucle d'écoute multicast.
 
         Cette méthode configure le socket UDP multicast,
@@ -150,7 +150,7 @@ class MulticastReceiver(threading.Thread):
                 self.handle_full_sync_request()
 
     def handle_full_sync_request(self):
-       """
+        """
         Traite une demande de synchronisation complète.
 
         Récupère l'ensemble des données depuis la base de données

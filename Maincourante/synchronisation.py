@@ -14,7 +14,7 @@
 from Connexion_dataBase import connexion
 
 class SyncManager:
-   """
+    """
     Gestionnaire de synchronisation des données entre les nœuds.
 
     Cette classe permet d'appliquer des mises à jour partielles (ajout, mise à jour, suppression)
@@ -22,7 +22,7 @@ class SyncManager:
     """
 
     def apply_update(self, msg):
-       """
+        """
         Applique une mise à jour locale en fonction de l'action reçue (ajout, mise à jour, suppression).
 
         Cette méthode traite les messages multicast et applique les modifications à la base de données locale
@@ -74,7 +74,7 @@ class SyncManager:
         conn.close()
 
     def apply_full_sync(self, data):
-       """
+        """
         Applique une synchronisation complète des données locales avec celles des autres nœuds.
 
         Cette méthode efface toutes les données locales dans les tables ``utilisateurs`` et ``donnees``

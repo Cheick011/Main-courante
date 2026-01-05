@@ -26,7 +26,7 @@ def connexion():
     :raises psycopg2.OperationalError: Si la connexion à la base de données échoue.
     """
    
-    return psycopg2.connect(
+   return psycopg2.connect(
         dbname="spelo_app",
         user="admin",
         password="admin",

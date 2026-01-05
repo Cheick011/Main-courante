@@ -16,7 +16,7 @@ import subprocess
 
 def notify_system(title, message):
     
-   """ 
+    """ 
     Affiche une notification système avec un titre et un message.
 
     Cette fonction adapte le mécanisme de notification en fonction
