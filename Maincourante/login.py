@@ -1,21 +1,34 @@
-"""
-Module d'authentification de l'application "Main courante spéléologue".
+Module d’authentification
+========================
 
-Ce module gère :
-- l'affichage de la fenêtre de connexion (PyQt5)
-- la vérification des identifiants dans la base PostgreSQL
-- la redirection vers la page correspondant au rôle utilisateur
-  (admin, gestionnaire ou client)
+.. module:: auth
+   :platform: Python / PyQt5 / PostgreSQL
+   :synopsis: Gestion de l’authentification de l’application Main courante spéléologue
+.. moduleauthor:: Gatlin ALLOHO <gatlin.alloho@etu.univ-poitiers.fr>
 
-Dépendances :
-- PyQt5
-- psycopg2
-- modules internes : admin, gestion, client
-"""
+Description
+-----------
 
+Ce module implémente le système d’authentification de l’application
+**Main courante spéléologue**.
 
+Il permet :
+- l’affichage d’une interface graphique de connexion avec **PyQt5**
+- la vérification des identifiants utilisateurs dans une base **PostgreSQL**
+- la redirection automatique vers l’interface correspondant au rôle utilisateur
 
+Dépendances
+-----------
 
+Le module repose sur les bibliothèques et modules suivants :
+
+- ``PyQt5`` : interface graphique
+- ``psycopg2`` : connexion à PostgreSQL
+- Modules internes :
+  
+  - ``admin`` : interface administrateur
+  - ``gestion`` : interface gestionnaire
+  - ``client`` : interface utilisateur simple
 
 import sys
 from PyQt5.QtWidgets import (
@@ -32,6 +45,7 @@ from gestion import GestionPage
 from client import ClientPage
 
 class LoginWindow(QWidget):
+  
     def __init__(self):
         super().__init__()
 
