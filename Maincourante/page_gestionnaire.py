@@ -110,7 +110,8 @@ class GestionPage(QMainWindow):
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
     def  add_line(self):
-        pass
+        self.__row = self.__bloc_tableau.rowCount()
+        self.__bloc_tableau.insertRow(self.__row)
         
     def save_modif(self):
         pass
