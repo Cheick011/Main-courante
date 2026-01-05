@@ -161,12 +161,6 @@ class AdminPage(QMainWindow):
         
     def valider(self):
       pass
-    def supp_adja(self):
-      pass
-    def supp_cheikh(self):
-      pass
-    def supp_gatlin(self):
-      pass
     def deconnexion(self):
       pass
     def bouton_gestion(self):
