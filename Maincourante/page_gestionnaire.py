@@ -111,9 +111,10 @@ class GestionPage(QMainWindow):
     
     def  add_line(self):
         pass
+        
     def save_modif(self):
         pass
-    
+        
     def deconnecter(self):
         
         #creer un message de confirmation pour la deconnexion
