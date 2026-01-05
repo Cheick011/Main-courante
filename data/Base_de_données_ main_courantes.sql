@@ -24,15 +24,33 @@ Prérequis
 sudo -i -u postgres
 psql
 
+
+Création de l’utilisateur et de la base
+---------------------------------------
+
+Un utilisateur administrateur est créé, puis une base de données lui est
+attribuée avec tous les privilèges.
+
+.. code-block:: sql
+   
 CREATE USER admin WITH PASSWORD 'admin';
 CREATE DATABASE spelo_app OWNER admin;
 GRANT ALL PRIVILEGES ON DATABASE spelo_app TO admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin;
 
+Connexion à la base de données
+------------------------------
 
+.. code-block:: sql
 
 \c spelo_app;
+
+Table utilisateurs
+------------------
+
+Cette table stocke les comptes utilisateurs de l’application ainsi que leur
+rôle.
 
 CREATE TABLE utilisateurs (
     id SERIAL PRIMARY KEY,
@@ -47,6 +65,13 @@ INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, role) VALUES
 ('gestionnaire', 'gestionnaire', 'gestionnaire'),
 ('lecteur', 'lecteur', 'lecteur');
 
+
+Table donnees
+-------------
+
+Cette table contient les données manipulées par l’application Spelo.
+Chaque entrée peut être associée à un utilisateur.
+
 CREATE TABLE donnees (
     id SERIAL PRIMARY KEY,
     heure TIME DEFAULT CURRENT_TIME,
@@ -58,28 +83,34 @@ CREATE TABLE donnees (
 );
 
 
+Création des rôles PostgreSQL
+----------------------------
 
+Trois rôles PostgreSQL sont définis afin de gérer les droits d’accès aux données.
 
+.. code-block:: sql
 
--- rôle de base : ne peut que lire
 CREATE ROLE lecteur;
-
--- rôle gestionnaire : peut manipuler les données
 CREATE ROLE gestionnaire;
-
--- rôle admin : peut tout faire
 CREATE ROLE admin;
 
 
+Attribution des droits
+----------------------
 -- Données accessibles à tous (lecture)
 GRANT SELECT ON donnees TO lecteur;
+
+
 
 -- Gestionnaire : lecture + modification
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 
+
+
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
