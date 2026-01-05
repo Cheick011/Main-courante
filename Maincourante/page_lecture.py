@@ -17,7 +17,7 @@ class GestionPage(QMainWindow):
 
   def __init__(self): 
         super().__init__()
-
+      
         # paramétrage de la fenêtre
         self.setWindowTitle(GestionPage.TITRE_FENETRE)
         self.resize(900, 600)
