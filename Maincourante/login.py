@@ -1,3 +1,22 @@
+"""
+Module d'authentification de l'application "Main courante spéléologue".
+
+Ce module gère :
+- l'affichage de la fenêtre de connexion (PyQt5)
+- la vérification des identifiants dans la base PostgreSQL
+- la redirection vers la page correspondant au rôle utilisateur
+  (admin, gestionnaire ou client)
+
+Dépendances :
+- PyQt5
+- psycopg2
+- modules internes : admin, gestion, client
+"""
+
+
+
+
+
 import sys
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox

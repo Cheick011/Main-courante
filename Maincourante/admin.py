@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Éditeur de Spyder
+
+Ceci est un script temporaire.
+"""
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView, QComboBox
 from PyQt5.QtGui import QIcon, QKeySequence
@@ -71,6 +79,7 @@ class AdminPage(QMainWindow):
         self.__bloc_general_lay.addWidget(self.__bloc_create_users)
         
         
+        
         self.__lineedit_nom = QLineEdit()
         self.__lineedit_mdp = QLineEdit()
        
@@ -83,6 +92,7 @@ class AdminPage(QMainWindow):
        
         self.__create_user=QPushButton("Créer l'utilisateur")
         self.__bloc_create_users_lay.addWidget(self.__create_user)
+        self.__create_user.clicked.connect(self.creer_utilisateur)
         #self.__create_user.setStyleSheet("background-color: #1E3A5F; color: white")
         
         #Création des listes d'utilisateurs
@@ -159,20 +169,113 @@ class AdminPage(QMainWindow):
         self.__valider.setFixedSize(120, 30)
         self.__valider.setStyleSheet("background-color: #1E3A5F; color: white")
         
+        # Boutons du haut
+        self.__Deconnecter.clicked.connect(self.deconnexion)
+        self.__gestion.clicked.connect(self.bouton_gestion)
+        
+        # Création utilisateur
+        
+        
+        # Suppression utilisateurs
+        self.__bouton_supp_adja.clicked.connect(self.supp_adja)
+        self.__bouton_supp_cheikh.clicked.connect(self.supp_cheikh)
+        self.__bouton_supp_gatlin.clicked.connect(self.supp_gatlin)
+        
+        # Validation des droits
+        self.__valider.clicked.connect(self.valider)
+        
     def valider(self):
-      pass
+        droits = {
+            "Adja": self.__combobox_adja.currentText(),
+            "Cheikh": self.__combobox_cheikh.currentText(),
+            "Gatlin": self.__combobox_gatlin.currentText()
+        }
+
+        message = "Droits mis à jour :\n"
+        for user, droit in droits.items():
+            message += f"- {user} : {droit}\n"
+
+        QMessageBox.information(self, "Validation", message)
+        
+    
+   
+
+
     def supp_adja(self):
-      pass
+        rep = QMessageBox.question(
+            self,
+            "Suppression",
+            "Voulez-vous vraiment supprimer l'utilisateur Adja ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if rep == QMessageBox.Yes:
+            self.__user_adja.hide()
+            QMessageBox.information(self, "Suppression", "Utilisateur Adja supprimé")
+
+
     def supp_cheikh(self):
-      pass
+        rep = QMessageBox.question(
+            self,
+            "Suppression",
+            "Voulez-vous vraiment supprimer l'utilisateur Cheikh ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if rep == QMessageBox.Yes:
+            self.__user_cheikh.hide()
+            QMessageBox.information(self, "Suppression", "Utilisateur Cheikh supprimé")
+
+
     def supp_gatlin(self):
-      pass
+        rep = QMessageBox.question(
+            self,
+            "Suppression",
+            "Voulez-vous vraiment supprimer l'utilisateur Gatlin ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if rep == QMessageBox.Yes:
+            self.__user_gatlin.hide()
+            QMessageBox.information(self, "Suppression", "Utilisateur Gatlin supprimé")
+    
+
     def deconnexion(self):
-      pass
+        rep = QMessageBox.question(
+            self,
+            "Déconnexion",
+            "Voulez-vous vous déconnecter ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if rep == QMessageBox.Yes:
+            self.close()
+        
     def bouton_gestion(self):
-      pass
+        from gestionnairepy import GestionPage  # import ici pour éviter les imports circulaires
+        self.page_gestion = GestionPage()
+        self.page_gestion.show()
+        self.close()  # ferme AdminPage
+
+    
     def creer_utilisateur(self):
-      pass
+        nom = self.__lineedit_nom.text()
+        mdp = self.__lineedit_mdp.text()
+    
+        if not nom or not mdp:
+            QMessageBox.warning(
+                self,
+                "Erreur",
+                "Veuillez remplir tous les champs"
+            )
+            return
+    
+        QMessageBox.information(
+            self,
+            "Création utilisateur",
+            f"L'utilisateur '{nom}' a été créé avec succès"
+        )
+    
+        self.__lineedit_nom.clear()
+        self.__lineedit_mdp.clear()
+            
+     
     def a_propos(self):          
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 

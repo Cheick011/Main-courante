@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-version Nov 12 09:51:19 2025
+Created on Sun Jan  4 22:10:05 2026
 
-@author: adja
-
+@author: etudiant
 """
+
 
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
@@ -53,7 +53,7 @@ class GestionPage(QMainWindow):
         
         #creation bloc haut
         
-        self.__bloc_haut = QGroupBox() 
+        self.__bloc_haut = QGroupBox()
         self.__bloc_haut_lay = QHBoxLayout()
         self.__bloc_haut.setLayout(self.__bloc_haut_lay)    
         self.__bloc_general_lay.addWidget(self.__bloc_haut) 
@@ -110,18 +110,27 @@ class GestionPage(QMainWindow):
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
     def  add_line(self):
-        pass
+        nb_lignes = self.__bloc_tableau.rowCount()
+        self.__bloc_tableau.insertRow(nb_lignes)
+        
     def save_modif(self):
-        pass
+        
+        QMessageBox.information(
+            self,
+            "Enregistrement",
+            "Les modifications ont bien été enregistrées"
+        )
+        
     
     def deconnecter(self):
-        
-        #creer un message de confirmation pour la deconnexion
-        reply = QMessageBox.question(self, 'Déconnexion','Voulez-vous vraiment vous déconnecter?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-        #Si l'utilisateur confirme, ferme la fenetre
+        rep = QMessageBox.question(
+            self,
+            "Déconnexion",
+            "Voulez-vous vous déconnecter ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if rep == QMessageBox.Yes:
             self.close()
-     
 
 def main():
     application = QApplication(sys.argv)
@@ -131,3 +140,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+

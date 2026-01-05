@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: mutlicast
+   :platform: Unix, windows
+   :synopsis: module pour la multidiffusion des informations entre les postes, l'envoie et la reception.
+
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
+
+
+"""
+
 import socket
 import struct
 import json
@@ -10,13 +23,32 @@ from .synchronisation import SyncManager
 
 
 class MulticastSender:
+   """
+    Classe utilitaire pour l'envoi de messages en multicast.
+
+    Cette classe fournit des méthodes statiques permettant
+    d'envoyer différents types de messages (mise à jour,
+    synchronisation complète) à l'ensemble des nœuds du réseau.
+    """
 
     def __init__(self):
+        """
+        Initialise l'émetteur multicast.
+
+        Aucun état interne n'est conservé, les méthodes sont
+        principalement utilisées de manière statique.
+        """
         super().__init__()
         
 
     @staticmethod
     def send_message(msg_dict):
+       """
+        Envoie un message multicast brut.
+
+        :param msg_dict: Message à envoyer sous forme de dictionnaire.
+        :type msg_dict: dict
+        """
         data = json.dumps(msg_dict).encode()
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
@@ -24,6 +56,16 @@ class MulticastSender:
 
     @staticmethod
     def send_update(action, table, payload):
+       """
+        Envoie une mise à jour de données aux autres nœuds.
+
+        :param action: Type d'action (``INSERT``, ``UPDATE``, ``DELETE``).
+        :type action: str
+        :param table: Nom de la table concernée.
+        :type table: str
+        :param payload: Données associées à la mise à jour.
+        :type payload: dict
+        """
         MulticastSender.send_message({
             "type": "update",
             "action": action,
@@ -33,10 +75,22 @@ class MulticastSender:
 
     @staticmethod
     def request_full_sync():
+       """
+        Envoie une requête de synchronisation complète.
+
+        Cette requête demande aux autres nœuds du réseau
+        d'envoyer l'intégralité de leurs données.
+        """
         MulticastSender.send_message({"type": "full_sync_request"})
 
     @staticmethod
     def send_full_sync_data(data):
+       """
+        Envoie les données complètes pour une synchronisation globale.
+
+        :param data: Ensemble des données à synchroniser.
+        :type data: dict
+        """
         MulticastSender.send_message({
             "type": "full_sync_data",
             "payload": data
@@ -44,12 +98,32 @@ class MulticastSender:
 
 
 class MulticastReceiver(threading.Thread):
+   """
+    Récepteur multicast exécuté dans un thread dédié.
+
+    Cette classe écoute en continu les messages multicast,
+    les interprète et déclenche les actions appropriées
+    via le gestionnaire de synchronisation.
+    """
 
     def __init__(self, sync_manager: SyncManager):
+       """
+        Initialise le récepteur multicast.
+
+        :param sync_manager: Gestionnaire de synchronisation des données.
+        :type sync_manager: SyncManager
+        """
         super().__init__(daemon=True)
         self.sync_manager = sync_manager
 
     def run(self):
+       """
+        Lance la boucle d'écoute multicast.
+
+        Cette méthode configure le socket UDP multicast,
+        rejoint le groupe multicast et traite les messages reçus
+        indéfiniment.
+        """
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", PORT))
@@ -76,6 +150,12 @@ class MulticastReceiver(threading.Thread):
                 self.handle_full_sync_request()
 
     def handle_full_sync_request(self):
+       """
+        Traite une demande de synchronisation complète.
+
+        Récupère l'ensemble des données depuis la base de données
+        locale et les diffuse aux autres nœuds via le multicast.
+        """
         conn = connexion()
         cur = conn.cursor()
 
