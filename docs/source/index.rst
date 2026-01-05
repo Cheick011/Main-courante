@@ -3,12 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Main-courante's documentation!
-=========================================
+
+Bienvenu dans la documentation de Main courante
+========================================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Objectif général de la SAÉ et cahiers 
+
+   content/objectifs
+   content/cahier_des_charges
+   
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Documentation du Code
+
+   content/code
+
 
 
 
