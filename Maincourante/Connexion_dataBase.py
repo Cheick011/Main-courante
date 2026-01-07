@@ -15,15 +15,16 @@ import psycopg2
 
 def connexion():
    """
-    Établit une connexion à la base de données PostgreSQL.
+      Establishes a connection to the PostgreSQL database.
 
-    Cette fonction crée et retourne une connexion à la base de données
-    ``spelo_app`` en utilisant la bibliothèque ``psycopg2`` avec les
-    paramètres de connexion prédéfinis.
+      This function creates and returns a connection to the ``spelo_app``
+      database using the ``psycopg2`` library with predefined connection
+      parameters.
 
-    :return: Objet de connexion à la base de données PostgreSQL.
-    :rtype: psycopg2.extensions.connection
-    :raises psycopg2.OperationalError: Si la connexion à la base de données échoue.
+      :return: PostgreSQL database connection object.
+      :rtype: psycopg2.extensions.connection
+      :raises psycopg2.OperationalError: If the connection to the database fails.
+
     """
    
    return psycopg2.connect(
