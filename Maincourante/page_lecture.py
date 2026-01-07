@@ -15,7 +15,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
 from PyQt5.QtGui import QIcon, QKeySequence
 
-class UtilisateurPage(QMainWindow):
+class ClientPage(QMainWindow):
     TITRE_FENETRE = "Main Courante"
     TOOLTIP_BOUTON_AC = "Accéder aux dernières mises à jour" 
     
@@ -23,7 +23,7 @@ class UtilisateurPage(QMainWindow):
         super().__init__()
 
         # ===== FENETRE =====
-        self.setWindowTitle(UtilisateurPage.TITRE_FENETRE)
+        self.setWindowTitle(ClientPage.TITRE_FENETRE)
         self.resize(900, 600)
         
         # ===== MENU =====
@@ -134,7 +134,7 @@ class UtilisateurPage(QMainWindow):
 # ================== MAIN ==================    
 def main():
     application = QApplication(sys.argv)
-    window = UtilisateurPage()
+    window = ClientPage()
     window.show()
     sys.exit(application.exec_())
 
