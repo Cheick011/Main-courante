@@ -10,9 +10,9 @@ Ce projet contient plusieurs modules permettant de modifier, d'ajouter, de suppr
 
 # Import des modules du projet
 import login
-import admin
-import gestion
-import client
+import page_admin
+import page_gestionnaire
+import page_lecture
 import config
 import communication
 import multicast 
