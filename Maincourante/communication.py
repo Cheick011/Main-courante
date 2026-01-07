@@ -16,52 +16,58 @@ from .multicast import MulticastReceiver, MulticastSender
 
 
 class CommunicationModule:
-    """
-    Module de communication réseau basé sur le multicast.
+   """
+   Multicast-based network communication module.
 
-    Cette classe centralise la gestion des communications réseau,
-    incluant la réception des messages multicast, l'envoi de mises
-    à jour et les demandes de synchronisation complète.
-    """
+   This class centralizes the management of network communications,
+   including receiving multicast messages, sending updates,
+   and handling full synchronization requests.
+   
+   """
 
     def __init__(self):
-        """
-        Initialise le module de communication.
+      """
+      Initializes the communication module.
 
-        Crée une instance de gestion de synchronisation ainsi qu’un
-        récepteur multicast chargé de traiter les messages entrants.
-        """
-        self.sync = SyncManager()
-        self.receiver = MulticastReceiver(self.sync)
+      Creates a synchronization manager instance as well as a multicast
+      receiver responsible for handling incoming messages.
+      """
+
+      self.sync = SyncManager()
+      self.receiver = MulticastReceiver(self.sync)
 
     def start(self):
-        """
-        Démarre le module de communication.
 
-        Lance le récepteur multicast afin de commencer l’écoute
-        des messages entrants sur le réseau.
-        """
-        self.receiver.start()
-        print(" Module de communication démarré")
+      """
+      Starts the communication module.
+
+      Launches the multicast receiver to begin listening
+      for incoming network messages.
+      """
+
+      self.receiver.start()
+      print(" Module de communication démarré")
 
     def send_update(self, action, table, payload):
-        """
-        Envoie une mise à jour via le réseau multicast.
 
-        :param action: Type d'action à effectuer (ex. ``INSERT``, ``UPDATE``, ``DELETE``).
-        :type action: str
-        :param table: Nom de la table concernée par la mise à jour.
-        :type table: str
-        :param payload: Données associées à la mise à jour.
-        :type payload: dict
-        """
-        MulticastSender.send_update(action, table, payload)
+      """
+      Sends an update over the multicast network.
+
+      :param action: Type of action to perform (e.g. ``INSERT``, ``UPDATE``, ``DELETE``).
+      :type action: str
+      :param table: Name of the table affected by the update.
+      :type table: str
+      :param payload: Data associated with the update.
+      :type payload: dict
+      """
+
+      MulticastSender.send_update(action, table, payload)
 
     def request_full_sync(self):
-        """
-        Demande une synchronisation complète des données.
+      """
+      Requests a full data synchronization.
 
-        Envoie une requête multicast afin de déclencher un envoi
-        complet des données depuis les autres nœuds du réseau.
-        """
-        MulticastSender.request_full_sync()
+      Sends a multicast request to trigger a complete data
+      transfer from the other nodes on the network.
+      """
+      MulticastSender.request_full_sync()
