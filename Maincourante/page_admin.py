@@ -1,6 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView, QComboBox
 from PyQt5.QtGui import QIcon, QKeySequence
+from gestionnairepy import GestionPage
+
 
 class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
