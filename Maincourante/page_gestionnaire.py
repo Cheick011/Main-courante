@@ -62,8 +62,6 @@ class GestionPage(QMainWindow):
         
         self.__titre= QLabel("Profil: Gestionnaire")
         self.__Deconnecter=QPushButton("Déconnexion")
-        
-        self.__Deconnecter.setToolTip(GestionPage.TOOLTIP_BOUTON_DEC)
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
         self.__Deconnecter.clicked.connect(self.deconnecter)
