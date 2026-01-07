@@ -14,24 +14,23 @@ class AdminPage(QMainWindow):
         self.setWindowTitle("Page Admin")
         self.resize(900, 600)
          
-        #Definition barre de menu
+        # ===== Menu =====
         self.__menuBar = QMenuBar()
         self.setMenuBar(self.__menuBar)
-        
         self.__help = self.__menuBar.addMenu('&Apropos')
         
-        #création des actions  
+         # ===== Actions ===== 
         self.__action_apropos = QAction(QIcon('actions/stock_search.png'),'A propos', self)
         self.__help.addAction(self.__action_apropos)
         self.__action_apropos.triggered.connect(self.a_propos)
         
-        #création du bloc général
+        # ===== Bloc général =====
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
         self.__bloc_general.setLayout(self.__bloc_general_lay)
         self.setCentralWidget(self.__bloc_general)
 
-        #création du bloc haut
+         # ===== Haut =====
         self.__bloc_haut = QWidget() 
         self.__bloc_haut_lay = QHBoxLayout()
         self.__bloc_haut.setLayout(self.__bloc_haut_lay)    
@@ -54,7 +53,7 @@ class AdminPage(QMainWindow):
         self.__bloc_haut_lay.addWidget(self.__gestion)
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
         
-        #création d'utilisateurs
+        # ===== Création utilisateur =====
         self.__bloc_create_users = QGroupBox("Création des comptes utilisateurs") 
         self.__bloc_create_users_lay = QFormLayout()
         self.__bloc_create_users.setLayout(self.__bloc_create_users_lay)    
@@ -73,7 +72,25 @@ class AdminPage(QMainWindow):
        
         self.__create_user=QPushButton("Créer l'utilisateur")
         self.__bloc_create_users_lay.addWidget(self.__create_user)
-        #self.__create_user.setStyleSheet("background-color: #1E3A5F; color: white")
+
+        # ===== Gestion des droits =====
+        self.__bloc_gestion_droits = QGroupBox("Gestion des comptes utilisateurs")
+        self.__bloc_gestion_droits_lay = QVBoxLayout()
+        self.__bloc_gestion_droits.setLayout(self.__bloc_gestion_droits_lay)
+        self.__bloc_general_lay.addWidget(self.__bloc_gestion_droits)
+
+        # ===== Bouton valider =====
+        self.__valider = QPushButton("Valider")
+        self.__valider.setFixedSize(120, 40)
+        self.__valider.setStyleSheet("background-color: #1E3A5F; color: white")
+        self.__bloc_general_lay.addWidget(self.__valider)
+
+        # ===== Connexions =====
+        self.__create_user.clicked.connect(self.creer_utilisateur)
+        self.__Deconnecter.clicked.connect(self.deconnexion)
+        self.__gestion.clicked.connect(self.bouton_gestion)
+        self.__valider.clicked.connect(self.valider)
+
         
         
       
