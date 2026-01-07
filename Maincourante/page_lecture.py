@@ -96,16 +96,16 @@ class UtilisateurPage(QMainWindow):
         self.__bloc_tableau.setHorizontalHeaderLabels(["Date" , "Heure", "De", "À", "Description"])
         self.__bloc_tableau.verticalHeader().setVisible(False)
       
-        
         self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         
         self.__bloc_tableau.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.__bloc_tableau.horizontalHeader().setStretchLastSection(True)
-
         
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
         
         self.lecture_seule()
+        
+# ================== FONCTIONS ==================
              
     def a_propos(self):
             
@@ -119,7 +119,8 @@ class UtilisateurPage(QMainWindow):
         
   
         
-    
+
+# ================== MAIN ==================    
 def main():
     application = QApplication(sys.argv)
     window = UtilisateurPage()
