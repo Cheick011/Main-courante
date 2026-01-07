@@ -3,7 +3,8 @@
 """
 version Nov 12 09:51:19 2025
 
-@author: 
+@author1: adja
+@author1: Marème
 
 """
 
@@ -13,8 +14,7 @@ from PyQt5.QtGui import QIcon, QKeySequence
 
 class GestionPage(QMainWindow):
     TITRE_FENETRE = "Page gestionnaire"
-    TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
-
+ 
   
     def __init__(self): 
         super().__init__()
@@ -23,13 +23,14 @@ class GestionPage(QMainWindow):
         self.setWindowTitle(GestionPage.TITRE_FENETRE)
         self.resize(900, 600)
         
+        # ===== MENU =====
         self.__menuBar = QMenuBar()
         self.setMenuBar(self.__menuBar)
         
         self.__help = self.__menuBar.addMenu('&Apropos')
         self.__seetings = self.__menuBar.addMenu('&Parametres')
 
-        
+        # ===== ACTIONS =====
         self.__action_apropos = QAction(QIcon('actions/stock_search.png'), 'A propos', self)
         self.__action_add_line = QAction(QIcon('actions/list-add.png'), 'Ajouter une ligne', self)
         self.__action_save = QAction(QIcon('actions/document-save.png'), 'Enregistrer les modifications', self)
@@ -39,20 +40,20 @@ class GestionPage(QMainWindow):
         self.__seetings.addAction(self.__action_add_line)
         self.__seetings.addAction(self.__action_save)
         
-        
+        # ===== CONNEXION AUX FONCTIONS =====
         self.__action_apropos.triggered.connect(self.a_propos)
         self.__action_add_line.triggered.connect(self.add_line)
         self.__action_save.triggered.connect(self.save_modif)
         
         
-        #creation  bloc général
+        # ===== BLOC GÉNÉRAL =====
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
         self.__bloc_general.setLayout(self.__bloc_general_lay)
         self.setCentralWidget(self.__bloc_general)
         
-        #creation bloc haut
-        
+      
+        # ===== BLOC HAUT =====
         self.__bloc_haut = QGroupBox() 
         self.__bloc_haut_lay = QHBoxLayout()
         self.__bloc_haut.setLayout(self.__bloc_haut_lay)    
@@ -72,15 +73,14 @@ class GestionPage(QMainWindow):
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
         self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white;")
         
-        # création d’un bloc pour centrer le tableau
+        # ===== BLOC CONTENEUR DU TABLEAU =====
         self.__bloc_tableau_conteneur = QWidget()
         self.__bloc_tableau_conteneur_lay = QHBoxLayout()
         self.__bloc_tableau_conteneur.setLayout(self.__bloc_tableau_conteneur_lay)
-
         self.__bloc_general_lay.addWidget(self.__bloc_tableau_conteneur)
          
 
-        # le tableau
+        # ===== BLOC TABLEAU =====
         self.__bloc_tableau = QTableWidget() #TableWidget n’est pas censé recevoir un layout, ce n’est pas un conteneur.
        
        
@@ -105,7 +105,7 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
 
        
-
+    # ================== FONCTIONS ==================
     def a_propos(self):       
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
@@ -124,7 +124,7 @@ class GestionPage(QMainWindow):
         #Si l'utilisateur confirme, ferme la fenetre
             self.close()
      
-
+# ================== MAIN ==================
 def main():
     application = QApplication(sys.argv)
     window = GestionPage()
