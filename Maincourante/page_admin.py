@@ -92,22 +92,92 @@ class AdminPage(QMainWindow):
         self.__valider.clicked.connect(self.valider)
 
         
-        
-      
-        
-       
-        
-    def valider(self):
-      pass
-    def deconnexion(self):
-      pass
-    def bouton_gestion(self):
-      pass
+    # ================== FONCTIONS ==================
+
     def creer_utilisateur(self):
-      pass
+        nom = self.__lineedit_nom.text().strip()
+        mdp = self.__lineedit_mdp.text().strip()
+
+        if nom == "" or mdp == "":
+            QMessageBox.warning(
+                self,
+                "Erreur",
+                "Veuillez remplir le nom d'utilisateur et le mot de passe"
+            )
+            return
+
+        user_widget = self.creer_widget_utilisateur(nom)
+        self.__bloc_gestion_droits_lay.addWidget(user_widget)
+
+        self.__lineedit_nom.clear()
+        self.__lineedit_mdp.clear()
+
+        QMessageBox.information(
+            self,
+            "Utilisateur créé",
+            f"L'utilisateur {nom} a été ajouté"
+        )
+
+    def creer_widget_utilisateur(self, nom):
+        self.__widget = QWidget()
+        self.__layout = QHBoxLayout(self.__widget)
+
+        self.__label = QLabel(nom)
+
+        self.__combo = QComboBox()
+        self.__combo.addItems(["lecture", "gestion", "admin"])
+
+        self.__bouton_suppr = QPushButton()
+        self.__bouton_suppr.setIcon(QIcon("actions/bouton_supp.png"))
+        self.__bouton_suppr.setFixedSize(30, 30)
+        self.__bouton_suppr.setStyleSheet("background-color: transparent")
+        self.__bouton_suppr.clicked.connect(
+            lambda: self.supprimer(self.__widget, nom)
+        )
+
+        self.__layout.addWidget(self.__label)
+        self.__layout.addWidget(self.__combo)
+        self.__layout.addWidget(self.__bouton_suppr)
+
+        return self.__widget
+
+    def supprimer(self, widget, nom):
+        self.__reponse = QMessageBox.question(
+            self,
+            "Suppression",
+            f"Voulez-vous vraiment supprimer l'utilisateur {nom} ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if self.__reponse == QMessageBox.Yes:
+            widget.deleteLater()
+
+    def valider(self):
+        QMessageBox.information(
+            self,
+            "Validation",
+            "Les droits ont été mis à jour"
+        )
+
+    def bouton_gestion(self):
+        self.page_gestion = GestionPage()
+        self.page_gestion.show()
+        self.close()
+
+    def deconnexion(self):
+        self.__rep = QMessageBox.question(
+            self,
+            "Déconnexion",
+            "Voulez-vous vous déconnecter ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if self.__rep == QMessageBox.Yes:
+            self.close()      
+    
     def a_propos(self):          
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 
+# ================== MAIN ==================
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = AdminPage()
