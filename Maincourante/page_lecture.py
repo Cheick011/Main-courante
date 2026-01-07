@@ -117,6 +117,17 @@ class UtilisateurPage(QMainWindow):
     def actualiser(self):
         pass
         
+    def deconnexion(self):
+        self.__rep = QMessageBox.question(
+            self,
+            "Déconnexion",
+            "Voulez-vous vous déconnecter ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if self.__rep == QMessageBox.Yes:
+            self.close()      
+    
+        
   
         
 
