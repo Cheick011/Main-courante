@@ -23,50 +23,48 @@ from .synchronisation import SyncManager
 
 
 class MulticastSender:
-    """
-    Classe utilitaire pour l'envoi de messages en multicast.
+   """
+   Utility class for sending multicast messages.
 
-    Cette classe fournit des méthodes statiques permettant
-    d'envoyer différents types de messages (mise à jour,
-    synchronisation complète) à l'ensemble des nœuds du réseau.
-    """
+   This class provides static methods to send different types of messages
+   (update notifications, full synchronization requests)
+   to all nodes on the network.
+   """
+
 
     def __init__(self):
-        """
-        Initialise l'émetteur multicast.
-
-        Aucun état interne n'est conservé, les méthodes sont
-        principalement utilisées de manière statique.
-        """
-        super().__init__()
+       """
+       Initializes the multicast sender.
+       No internal state is maintained; the methods are primarily
+       used in a static manner.
+       """
+       super().__init__()
         
 
     @staticmethod
     def send_message(msg_dict):
-        """
-        Envoie un message multicast brut.
-
-        :param msg_dict: Message à envoyer sous forme de dictionnaire.
-        :type msg_dict: dict
-        """
-        data = json.dumps(msg_dict).encode()
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
-        sock.sendto(data, (MULTICAST_GRP, PORT))
+       """
+       Sends a raw multicast message.
+       :param msg_dict: Message to send as a dictionary.
+       :type msg_dict: dict
+       """
+       data = json.dumps(msg_dict).encode()
+       sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+       sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+       sock.sendto(data, (MULTICAST_GRP, PORT))
 
     @staticmethod
     def send_update(action, table, payload):
-        """
-        Envoie une mise à jour de données aux autres nœuds.
-
-        :param action: Type d'action (``INSERT``, ``UPDATE``, ``DELETE``).
-        :type action: str
-        :param table: Nom de la table concernée.
-        :type table: str
-        :param payload: Données associées à la mise à jour.
-        :type payload: dict
-        """
-        MulticastSender.send_message({
+       """
+       Sends a data update to the other nodes.
+       :param action: Type of action (``INSERT``, ``UPDATE``, ``DELETE``).
+       :type action: str
+       :param table: Name of the affected table.
+       :type table: str
+       :param payload: Data associated with the update.
+       :type payload: dict
+       """
+       MulticastSender.send_message({
             "type": "update",
             "action": action,
             "table": table,
@@ -75,46 +73,44 @@ class MulticastSender:
 
     @staticmethod
     def request_full_sync():
-        """
-        Envoie une requête de synchronisation complète.
-
-        Cette requête demande aux autres nœuds du réseau
-        d'envoyer l'intégralité de leurs données.
-        """
-        MulticastSender.send_message({"type": "full_sync_request"})
+       """
+       Sends a full synchronization request.
+       
+       This request asks other nodes in the network
+       to send all of their data.
+       """
+       MulticastSender.send_message({"type": "full_sync_request"})
 
     @staticmethod
     def send_full_sync_data(data):
-        """
-        Envoie les données complètes pour une synchronisation globale.
-
-        :param data: Ensemble des données à synchroniser.
-        :type data: dict
-        """
-        MulticastSender.send_message({
+       """
+       Sends the complete data for a full synchronization.
+       :param data: The set of data to synchronize.
+       :type data: dict
+       """
+       MulticastSender.send_message({
             "type": "full_sync_data",
             "payload": data
         })
 
 
 class MulticastReceiver(threading.Thread):
-    """
-    Récepteur multicast exécuté dans un thread dédié.
+      """
+      Multicast receiver running in a dedicated thread.
+      This class continuously listens for multicast messages,
+      processes them, and triggers the appropriate actions
+      via the synchronization handler.
+      """
 
-    Cette classe écoute en continu les messages multicast,
-    les interprète et déclenche les actions appropriées
-    via le gestionnaire de synchronisation.
-    """
 
     def __init__(self, sync_manager: SyncManager):
-        """
-        Initialise le récepteur multicast.
-
-        :param sync_manager: Gestionnaire de synchronisation des données.
-        :type sync_manager: SyncManager
-        """
-        super().__init__(daemon=True)
-        self.sync_manager = sync_manager
+       """
+       Initializes the multicast receiver.
+       :param sync_manager: Data synchronization manager.
+       :type sync_manager: SyncManager
+       """
+       super().__init__(daemon=True)
+       self.sync_manager = sync_manager
 
     def run(self):
         """
@@ -150,17 +146,17 @@ class MulticastReceiver(threading.Thread):
                 self.handle_full_sync_request()
 
     def handle_full_sync_request(self):
-        """
-        Traite une demande de synchronisation complète.
-
-        Récupère l'ensemble des données depuis la base de données
-        locale et les diffuse aux autres nœuds via le multicast.
-        """
-        conn = connexion()
-        cur = conn.cursor()
-
-        cur.execute("SELECT * FROM utilisateurs ORDER BY id;")
-        utilisateurs = [
+       
+       """
+       Starts the multicast listening loop.
+       This method sets up the UDP multicast socket,
+       joins the multicast group, and processes incoming
+       messages indefinitely.
+       """
+       conn = connexion()
+       cur = conn.cursor()
+       cur.execute("SELECT * FROM utilisateurs ORDER BY id;")
+       utilisateurs = [
             {
                 "id": r[0],
                 "nom_utilisateur": r[1],
@@ -170,9 +166,8 @@ class MulticastReceiver(threading.Thread):
             }
             for r in cur.fetchall()
         ]
-
-        cur.execute("SELECT * FROM donnees ORDER BY id;")
-        donnees = [
+       cur.execute("SELECT * FROM donnees ORDER BY id;")
+       donnees = [
             {
                 "id": r[0],
                 "heure": str(r[1]),
@@ -184,11 +179,9 @@ class MulticastReceiver(threading.Thread):
             }
             for r in cur.fetchall()
         ]
-
-        cur.close()
-        conn.close()
-
-        MulticastSender.send_full_sync_data({
+       cur.close()
+       conn.close()
+       MulticastSender.send_full_sync_data({
             "utilisateurs": utilisateurs,
             "donnees": donnees
         })
