@@ -40,9 +40,9 @@ from PyQt5.QtCore import Qt
 import psycopg2
 from psycopg2.extras import DictCursor
 
-from admin import AdminPage
-from gestion import GestionPage
-from client import ClientPage
+from page_admin import AdminPage
+from page_gestionnaire import GestionPage
+from page_lecture import ClientPage
 
 class LoginWindow(QWidget):
   
