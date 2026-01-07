@@ -88,16 +88,7 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau.insertRow(self.__row)
         self.__bloc_tableau.setColumnCount(5)
         self.__bloc_tableau.setHorizontalHeaderLabels(["Date", "Heure", "De", "À", "Description"])
-        self.__bloc_tableau.verticalHeader().setVisible(False)
-        
-        #self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        
-        self.__bloc_tableau.setItem(self.__row, 0, QTableWidgetItem("12/11/2025"))
-        self.__bloc_tableau.setItem(self.__row, 1, QTableWidgetItem("08:05"))
-        self.__bloc_tableau.setItem(self.__row, 2, QTableWidgetItem(""))
-        self.__bloc_tableau.setItem(self.__row, 3, QTableWidgetItem(""))
-        self.__bloc_tableau.setItem(self.__row, 4, QTableWidgetItem("Début des opérations"))
-        
+        self.__bloc_tableau.verticalHeader().setVisible(False)        
         self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         
         self.__bloc_tableau.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -116,12 +107,14 @@ class GestionPage(QMainWindow):
     def save_modif(self):
         pass
         
-    def deconnecter(self):
-        
-        #creer un message de confirmation pour la deconnexion
-        reply = QMessageBox.question(self, 'Déconnexion','Voulez-vous vraiment vous déconnecter?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-        #Si l'utilisateur confirme, ferme la fenetre
+    def deconnecter(self): 
+        self.__rep = QMessageBox.question(
+            self,
+            "Déconnexion",
+            "Voulez-vous vous déconnecter ?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if self.__rep == QMessageBox.Yes:
             self.close()
      
 # ================== MAIN ==================
