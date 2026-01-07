@@ -4,8 +4,7 @@ from PyQt5.QtGui import QIcon, QKeySequence
 
 class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
-    TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
-    TOOLTIP_BOUTON_GES = "Accéder à la page gestionnaire"
+
     
     def __init__(self):
         super().__init__()
@@ -49,7 +48,6 @@ class AdminPage(QMainWindow):
         self.__gestion.setFixedSize(120, 30)
         
         self.__Deconnecter=QPushButton("Déconnexion")
-        self.__Deconnecter.setToolTip(AdminPage.TOOLTIP_BOUTON_DEC)
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
         
@@ -78,79 +76,10 @@ class AdminPage(QMainWindow):
         self.__bloc_create_users_lay.addWidget(self.__create_user)
         #self.__create_user.setStyleSheet("background-color: #1E3A5F; color: white")
         
-        #Création des listes d'utilisateurs
         
-        self.__bloc_gestion_droits = QGroupBox("Gestion des droits d'utilisateurs") 
-        self.__bloc_gestion_droits_lay = QVBoxLayout()
-        self.__bloc_gestion_droits.setLayout(self.__bloc_gestion_droits_lay)    
-        self.__bloc_general_lay.addWidget(self.__bloc_gestion_droits)
+      
         
-        #user adja
-        self.__user_adja = QWidget()
-        self.__user_adja_lay = QHBoxLayout()
-        self.__user_adja.setLayout(self.__user_adja_lay)
-        self.__bloc_gestion_droits_lay.addWidget(self.__user_adja)
-        
-        self.__label_adja = QLabel("Adja")
-        self.__combobox_adja= QComboBox()
-        self.__combobox_adja.addItems(["lecture", "gestion", "admin" ])
        
-        self.__bouton_supp_adja= QPushButton()
-        self.__bouton_supp_adja.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
-        self.__bouton_supp_adja.setFixedSize(30, 30)
-        self.__bouton_supp_adja.setToolTip("Supprimer cet utilisateur")
-        self.__bouton_supp_adja.setStyleSheet("background-color: transparent")
-        
-        self.__user_adja_lay.addWidget(self.__label_adja)
-        self.__user_adja_lay.addWidget(self.__combobox_adja)
-        self.__user_adja_lay.addWidget(self.__bouton_supp_adja)
-        
-        #user cheikh
-        self.__user_cheikh = QWidget()
-        self.__user_cheikh_lay = QHBoxLayout()
-        self.__user_cheikh.setLayout(self.__user_cheikh_lay)
-        self.__bloc_gestion_droits_lay.addWidget(self.__user_cheikh)
-        
-        self.__label_cheikh = QLabel("Cheikh")
-        self.__combobox_cheikh= QComboBox()
-        self.__combobox_cheikh.addItems(["lecture", "gestion", "admin" ])
-        
-        self.__bouton_supp_cheikh= QPushButton()
-        self.__bouton_supp_cheikh.setFixedSize(30, 30)
-        self.__bouton_supp_cheikh.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
-        self.__bouton_supp_cheikh.setToolTip("Supprimer cet utilisateur")
-        self.__bouton_supp_cheikh.setStyleSheet("background-color: transparent")
-        
-        
-        self.__user_cheikh_lay.addWidget(self.__label_cheikh)
-        self.__user_cheikh_lay.addWidget(self.__combobox_cheikh)
-        self.__user_cheikh_lay.addWidget(self.__bouton_supp_cheikh)
-        
-        #user gatlin
-        self.__user_gatlin = QWidget()
-        self.__user_gatlin_lay = QHBoxLayout()
-        self.__user_gatlin.setLayout(self.__user_gatlin_lay)
-        self.__bloc_gestion_droits_lay.addWidget(self.__user_gatlin)
-        
-        self.__label_gatlin = QLabel("Gatlin")
-        self.__combobox_gatlin= QComboBox()
-        self.__combobox_gatlin.addItems(["lecture", "gestion", "admin" ])
-        
-        self.__bouton_supp_gatlin= QPushButton()
-        self.__bouton_supp_gatlin.setFixedSize(30, 30)
-        self.__bouton_supp_gatlin.setIcon(QIcon("actions/Capture d’écran 2026-01-01 à 16.08.03.png"))
-        self.__bouton_supp_gatlin.setToolTip("Supprimer cet utilisateur")
-        self.__bouton_supp_gatlin.setStyleSheet("background-color: transparent")
-        
-        self.__user_gatlin_lay.addWidget(self.__label_gatlin)
-        self.__user_gatlin_lay.addWidget(self.__combobox_gatlin)
-        self.__user_gatlin_lay.addWidget(self.__bouton_supp_gatlin)
-        
-        
-        self.__valider=QPushButton("Valider")
-        self.__bloc_general_lay.addWidget(self.__valider)
-        self.__valider.setFixedSize(120, 30)
-        self.__valider.setStyleSheet("background-color: #1E3A5F; color: white")
         
     def valider(self):
       pass
