@@ -14,24 +14,27 @@
 from Connexion_dataBase import connexion
 
 class SyncManager:
-    """
-    Gestionnaire de synchronisation des données entre les nœuds.
+   """
+   Data synchronization manager between nodes.
+   
+   This class allows applying partial updates (add, update, delete)
+   to the local data as well as performing full synchronization
+   with other machines.
+   """
 
-    Cette classe permet d'appliquer des mises à jour partielles (ajout, mise à jour, suppression)
-    des données locales ainsi que d'effectuer une synchronisation complète avec les autres machines.
-    """
 
     def apply_update(self, msg):
-        """
-        Applique une mise à jour locale en fonction de l'action reçue (ajout, mise à jour, suppression).
+       
+       """
+       Applies a local update based on the received action (add, update, delete).
+       This method processes multicast messages and applies the changes
+       to the local database in the ``donnees`` table.
+       
+       :param msg: Received message containing the details of the action to apply.
+       :type msg: dict
+       :raises Exception: If an error occurs while applying the update.
+       """
 
-        Cette méthode traite les messages multicast et applique les modifications à la base de données locale
-        dans la table ``donnees``.
-
-        :param msg: Message reçu contenant les détails de l'action à appliquer.
-        :type msg: dict
-        :raises Exception: Si une erreur se produit lors de l'application de la mise à jour.
-        """
         action = msg["action"]
         table = msg["table"]
         payload = msg["payload"]
@@ -74,18 +77,19 @@ class SyncManager:
         conn.close()
 
     def apply_full_sync(self, data):
-        """
-        Applique une synchronisation complète des données locales avec celles des autres nœuds.
-
-        Cette méthode efface toutes les données locales dans les tables ``utilisateurs`` et ``donnees``
-        et les remplace par celles reçues d'un autre nœud, assurant ainsi une cohérence complète entre les machines.
-
-        :param data: Données à synchroniser, comprenant les tables ``utilisateurs`` et ``donnees``.
-        :type data: dict
-        :raises Exception: Si une erreur se produit lors de l'application de la synchronisation.
-        """
-        conn = connexion()
-        cur = conn.cursor()
+       """
+       Performs a full synchronization of local data with that of other nodes.
+       
+       This method clears all local data in the ``utilisateurs`` and ``donnees`` tables
+       and replaces it with data received from another node, ensuring complete consistency
+       across machines.
+       
+       :param data: Data to synchronize, including the ``utilisateurs`` and ``donnees`` tables.
+       :type data: dict
+       :raises Exception: If an error occurs while applying the synchronization.
+       """
+       conn = connexion()
+       cur = conn.cursor()
 
         try:
             cur.execute("DELETE FROM utilisateurs;")
