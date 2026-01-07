@@ -22,24 +22,21 @@ class AdminPage(QMainWindow):
         
         #création des actions  
         self.__action_apropos = QAction(QIcon('actions/stock_search.png'),'A propos', self)
-
-        
         self.__help.addAction(self.__action_apropos)
-        
         self.__action_apropos.triggered.connect(self.a_propos)
         
         #création du bloc général
-        
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
         self.__bloc_general.setLayout(self.__bloc_general_lay)
         self.setCentralWidget(self.__bloc_general)
-        
+
+        #création du bloc haut
         self.__bloc_haut = QWidget() 
         self.__bloc_haut_lay = QHBoxLayout()
         self.__bloc_haut.setLayout(self.__bloc_haut_lay)    
         self.__bloc_general_lay.addWidget(self.__bloc_haut)
-        self.__bloc_haut.setFixedHeight(50)
+        self.__bloc_haut.setFixedHeight(60)
 
        
         self.__titre= QLabel("Profil: Administrateur")
