@@ -2,14 +2,6 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView, QComboBox
 from PyQt5.QtGui import QIcon, QKeySequence
 
-   # def __init__(self):
-    #    super().__init__()
-      #  self.setWindowTitle("Page Admin")
-     #   self.setGeometry(300, 300, 400, 200)
-       # layout = QVBoxLayout()
-     #   layout.addWidget(QLabel("Bienvenue Admin !"))
-      #  self.setLayout(layout)
-
 class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
     TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
