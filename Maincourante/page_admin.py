@@ -37,12 +37,12 @@ class AdminPage(QMainWindow):
         self.__bloc_haut.setLayout(self.__bloc_haut_lay)    
         self.__bloc_general_lay.addWidget(self.__bloc_haut)
         self.__bloc_haut.setFixedHeight(60)
+        self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white")
 
        
         self.__titre= QLabel("Profil: Administrateur")
         
         self.__gestion=QPushButton("Page Gestion")
-        self.__gestion.setToolTip(AdminPage.TOOLTIP_BOUTON_GES)
         self.__gestion.setStyleSheet("background-color: violet; color: white")
         self.__gestion.setFixedSize(120, 30)
         
@@ -53,8 +53,8 @@ class AdminPage(QMainWindow):
         self.__bloc_haut_lay.addWidget(self.__titre)
         self.__bloc_haut_lay.addWidget(self.__gestion)
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
-        self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white")
         
+        #création d'utilisateurs
         self.__bloc_create_users = QGroupBox("Création des comptes utilisateurs") 
         self.__bloc_create_users_lay = QFormLayout()
         self.__bloc_create_users.setLayout(self.__bloc_create_users_lay)    
