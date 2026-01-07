@@ -16,24 +16,24 @@ import subprocess
 
 def notify_system(title, message):
     
-    """ 
-    Affiche une notification système avec un titre et un message.
+   """
+    Displays a system notification with a title and message.
 
-    Cette fonction adapte le mécanisme de notification en fonction
-    du système d'exploitation détecté :
+    This function adapts the notification mechanism depending
+    on the detected operating system:
 
-    - **Linux** : utilisation de ``notify-send`` et ``paplay``
-    - **Windows** : utilisation de ``win10toast`` et ``winsound``
-    - **Autres systèmes** : affichage dans la sortie standard
+    - **Linux**: uses ``notify-send`` and ``paplay``
+    - **Windows**: uses ``win10toast`` and ``winsound``
+    - **Other systems**: prints to the standard output
 
-    :param title: Titre de la notification.
+    :param title: Notification title.
     :type title: str
-    :param message: Contenu du message à afficher.
+    :param message: Content of the message to display.
     :type message: str
-    :raises Exception: Toute exception levée lors de l'envoi de la notification
-                       est interceptée et affichée dans la console.
-    """
-    os_name = platform.system().lower()
+    :raises Exception: Any exception raised while sending the notification
+                       is caught and printed to the console.
+   """
+   os_name = platform.system().lower()
 
     try:
         if "linux" in os_name:
