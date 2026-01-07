@@ -5,7 +5,9 @@
 """
 version Nov 12 09:51:19 2025
 
-@author: 
+@author 1:adja
+@author 2: Marème
+
 
 """
 
@@ -15,22 +17,23 @@ from PyQt5.QtGui import QIcon, QKeySequence
 
 class UtilisateurPage(QMainWindow):
     TITRE_FENETRE = "Main Courante"
-    TOOLTIP_BOUTON_DEC = "Déconnecter vous de votre session"
     TOOLTIP_BOUTON_AC = "Accéder aux dernières mises à jour" 
     
     def __init__(self): 
         super().__init__()
 
-        # paramétrage de la fenêtre
+        # ===== FENETRE =====
         self.setWindowTitle(UtilisateurPage.TITRE_FENETRE)
         self.resize(900, 600)
         
+        # ===== MENU =====
         self.__menuBar = QMenuBar()
         self.setMenuBar(self.__menuBar)
         
         self.__help = self.__menuBar.addMenu('&Apropos')
         
-        #création des actions  
+        
+        # ===== ACTIONS =====
         self.__action_apropos = QAction(QIcon('actions/stock_search.png'),'A propos', self)
 
         
@@ -39,13 +42,15 @@ class UtilisateurPage(QMainWindow):
         self.__action_apropos.triggered.connect(self.a_propos)
        
         
-        #creation  bloc général
+        
+        # ===== BLOC GÉNÉRAL =====
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
         self.__bloc_general.setLayout(self.__bloc_general_lay)
         self.setCentralWidget(self.__bloc_general)
         
-        #creation bloc haut
+        
+        # ===== BLOC HAUT =====
         
         self.__bloc_haut = QGroupBox() 
         self.__bloc_haut_lay = QHBoxLayout()
@@ -57,8 +62,7 @@ class UtilisateurPage(QMainWindow):
         self.__Actualiser=QPushButton("Actualiser")
         self.__Deconnecter=QPushButton("Déconnexion")
         
-        #styling the button
-        self.__Deconnecter.setToolTip(UtilisateurPage.TOOLTIP_BOUTON_DEC)
+      
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
         
@@ -73,16 +77,17 @@ class UtilisateurPage(QMainWindow):
         self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white;")
 
         
-        # création d’un bloc pour centrer le tableau
+       
+        # ===== BLOC CONTENEUR DU TABLEAU =====
         self.__bloc_tableau_conteneur = QWidget()
         self.__bloc_tableau_conteneur_lay = QVBoxLayout()
         self.__bloc_tableau_conteneur.setLayout(self.__bloc_tableau_conteneur_lay)
-
         self.__bloc_general_lay.addWidget(self.__bloc_tableau_conteneur)
          
 
         
-        # le tableau
+       
+        # ===== BLOC TABLEAU =====
         self.__bloc_tableau = QTableWidget() #TableWidget n’est pas censé recevoir un layout, ce n’est pas un conteneur.
        
         self.__row =  self.__bloc_tableau.rowCount()
@@ -91,7 +96,6 @@ class UtilisateurPage(QMainWindow):
         self.__bloc_tableau.setHorizontalHeaderLabels(["Date" , "Heure", "De", "À", "Description"])
         self.__bloc_tableau.verticalHeader().setVisible(False)
       
-        #self.__bloc_tableau.setStyleSheet
         
         self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         
@@ -99,10 +103,7 @@ class UtilisateurPage(QMainWindow):
         self.__bloc_tableau.horizontalHeader().setStretchLastSection(True)
 
         
-        # stretch permet de placer le tableu au centre, on ajoute le tableau au layout du conteneur
-        #self.__bloc_tableau_conteneur_lay.addStretch()
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
-        #self.__bloc_tableau_conteneur_lay.addStretch(1)
         
         self.lecture_seule()
              
@@ -112,6 +113,9 @@ class UtilisateurPage(QMainWindow):
     
     def lecture_seule(self):
         self.__bloc_tableau.setEditTriggers( QTableWidget.NoEditTriggers)
+
+    def actualiser(self):
+        pass
         
   
         
