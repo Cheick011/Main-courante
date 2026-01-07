@@ -109,7 +109,7 @@ class UtilisateurPage(QMainWindow):
              
     def a_propos(self):
             
-      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI RT promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
+      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunications promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
     def lecture_seule(self):
         self.__bloc_tableau.setEditTriggers( QTableWidget.NoEditTriggers)
