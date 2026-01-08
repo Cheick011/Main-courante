@@ -10,7 +10,7 @@ Lance l'application de login pour la Main Courante Spéléologue.
 
 import sys
 from PyQt5.QtWidgets import QApplication
-from auth import LoginWindow  # Assure-toi que auth.py est dans le même dossier ou adapte le chemin
+from login import LoginWindow  # Assure-toi que auth.py est dans le même dossier ou adapte le chemin
 
 def main():
     """
