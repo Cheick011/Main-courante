@@ -1,3 +1,19 @@
+# Python version requirement
+# (Python 3.13 recommended)
 python==3.13.0
 
+# GUI
+PyQt5==5.15.9
+
+# Database
+psycopg2-binary==2.9.9
+
+# Documentation
 sphinx-build==8.1.3
+
+# Windows notifications (si Windows)
+win10toast==0.9.0
+
+# Standard libraries used: socket, struct, threading, json
+# (No installation required, included in Python standard library)
+
