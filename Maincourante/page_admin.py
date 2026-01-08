@@ -1,7 +1,18 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jan  7 13:10:13 2026
+
+@authors: adja, Marème
+
+"""
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView, QComboBox
 from PyQt5.QtGui import QIcon, QKeySequence
 from page_gestionnaire import GestionPage
+from Connexion_dataBase import connexion
 
 
 class AdminPage(QMainWindow):
@@ -62,7 +73,8 @@ class AdminPage(QMainWindow):
         
         self.__lineedit_nom = QLineEdit()
         self.__lineedit_mdp = QLineEdit()
-       
+        self.__lineedit_mdp.setEchoMode(QLineEdit.Password)
+ 
         
         self.__label_nom = QLabel("Nom d'utilisateur")
         self.__label_mdp = QLabel("Mot de passe")
@@ -90,9 +102,41 @@ class AdminPage(QMainWindow):
         self.__Deconnecter.clicked.connect(self.deconnexion)
         self.__gestion.clicked.connect(self.bouton_gestion)
         self.__valider.clicked.connect(self.valider)
+        
+        self.load_utilisateurs_from_db()
+
 
         
     # ================== FONCTIONS ==================
+
+    def load_utilisateurs_from_db(self):
+      """
+   Charge tous les utilisateurs depuis la base de données
+   et les affiche dans le bloc de gestion des droits.
+      """
+      try:
+        conn = connexion()
+        cur = conn.cursor()
+        cur.execute("SELECT nom_utilisateur,mot_de_passe, role FROM utilisateurs;")
+        rows = cur.fetchall()
+        
+        # Vider l'affichage actuel
+        for i in reversed(range(self.__bloc_gestion_droits_lay.count())):
+            widget = self.__bloc_gestion_droits_lay.itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        # Ajouter tous les utilisateurs
+        for nom, mdp, role in rows:
+            user_widget = self.creer_widget_utilisateur(nom, mdp, role)
+            self.__bloc_gestion_droits_lay.addWidget(user_widget)
+
+      except Exception as e:
+        QMessageBox.critical(self, "Erreur", f"Impossible de charger les utilisateurs : {e}")
+       
+      finally:
+        cur.close()
+        conn.close()
 
     def creer_utilisateur(self):
         nom = self.__lineedit_nom.text().strip()
@@ -106,7 +150,7 @@ class AdminPage(QMainWindow):
             )
             return
 
-        user_widget = self.creer_widget_utilisateur(nom)
+        user_widget = self.creer_widget_utilisateur(nom,mdp)
         self.__bloc_gestion_droits_lay.addWidget(user_widget)
 
         self.__lineedit_nom.clear()
@@ -118,14 +162,20 @@ class AdminPage(QMainWindow):
             f"L'utilisateur {nom} a été ajouté"
         )
 
-    def creer_widget_utilisateur(self, nom):
+    def creer_widget_utilisateur(self, nom, mdp, role="lecteur"):
         self.__widget = QWidget()
         self.__layout = QHBoxLayout(self.__widget)
 
         self.__label = QLabel(nom)
+        
+        self.__mdp_edit = QLineEdit()
+        self.__mdp_edit.setText(mdp)
+        #self.__mdp_edit.setEchoMode(QLineEdit.Password)  
+    
 
         self.__combo = QComboBox()
-        self.__combo.addItems(["lecture", "gestion", "admin"])
+        self.__combo.addItems(["lecteur", "gestionnaire", "admin"])
+        self.__combo.setCurrentText(role)
 
         self.__bouton_suppr = QPushButton()
         self.__bouton_suppr.setIcon(QIcon("actions/bouton_supp.png"))
@@ -138,6 +188,11 @@ class AdminPage(QMainWindow):
         self.__layout.addWidget(self.__label)
         self.__layout.addWidget(self.__combo)
         self.__layout.addWidget(self.__bouton_suppr)
+      
+        
+        self.__widget.nom = nom
+        self.__widget.mdp_edit = self.__mdp_edit
+        self.__widget.combo = self.__combo 
 
         return self.__widget
 
@@ -150,14 +205,55 @@ class AdminPage(QMainWindow):
         )
 
         if self.__reponse == QMessageBox.Yes:
+            try:
+              conn = connexion()
+              cur = conn.cursor()
+              cur.execute("DELETE FROM utilisateurs WHERE nom_utilisateur=%s;", (nom,))
+              conn.commit()
+            except Exception as e:
+              QMessageBox.critical(self, "Erreur", f"Impossible de supprimer : {e}")
+            finally:
+              cur.close()
+              conn.close()
+
             widget.deleteLater()
 
     def valider(self):
-        QMessageBox.information(
-            self,
-            "Validation",
-            "Les droits ont été mis à jour"
-        )
+      try:
+        from Connexion_dataBase import connexion
+        conn = connexion()  
+        cur = conn.cursor()
+
+        for i in range(self.__bloc_gestion_droits_lay.count()):
+            widget = self.__bloc_gestion_droits_lay.itemAt(i).widget()
+            if not hasattr(widget, "nom"):
+                continue  
+            
+            nom = widget.nom
+            mdp = widget.mdp_edit.text()
+            role = widget.combo.currentText()
+
+            if not nom or not mdp or not role:
+                continue
+
+            cur.execute("""
+                INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, role)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (nom_utilisateur) DO UPDATE
+                SET mot_de_passe = EXCLUDED.mot_de_passe,
+                    role = EXCLUDED.role;
+            """, (nom, mdp, role))
+        
+        conn.commit()
+        QMessageBox.information(self, "Validation", "Les utilisateurs ont été enregistrés avec succès.")
+        
+      except:
+        QMessageBox.critical(self, "Erreur", "Impossible de sauvegarder les utilisateurs")
+        
+      finally:
+        cur.close()
+        conn.close()
+
 
     def bouton_gestion(self):
         self.page_gestion = GestionPage()
