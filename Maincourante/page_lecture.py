@@ -14,16 +14,18 @@ version Nov 12 09:51:19 2025
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
 from PyQt5.QtGui import QIcon, QKeySequence
+from Connexion_dataBase import connexion
 
-class ClientPage(QMainWindow):
+
+class UtilisateurPage(QMainWindow):
     TITRE_FENETRE = "Main Courante"
-    TOOLTIP_BOUTON_AC = "Accéder aux dernières mises à jour" 
+
     
     def __init__(self): 
         super().__init__()
 
         # ===== FENETRE =====
-        self.setWindowTitle(ClientPage.TITRE_FENETRE)
+        self.setWindowTitle(UtilisateurPage.TITRE_FENETRE)
         self.resize(900, 600)
         
         # ===== MENU =====
@@ -42,7 +44,6 @@ class ClientPage(QMainWindow):
         self.__action_apropos.triggered.connect(self.a_propos)
        
         
-        
         # ===== BLOC GÉNÉRAL =====
         self.__bloc_general = QWidget() 
         self.__bloc_general_lay = QVBoxLayout()
@@ -59,20 +60,15 @@ class ClientPage(QMainWindow):
        
         
         self.__titre= QLabel("Profil: Lecture seule")
-        self.__Actualiser=QPushButton("Actualiser")
         self.__Deconnecter=QPushButton("Déconnexion")
         
       
         self.__Deconnecter.setStyleSheet("background-color: violet; color: white")
         self.__Deconnecter.setFixedSize(120, 30)
+        self.__Deconnecter.clicked.connect(self.deconnexion)
         
-
-        self.__Actualiser.setToolTip(UtilisateurPage.TOOLTIP_BOUTON_AC)
-        self.__Actualiser.setStyleSheet("background-color: violet; color: white")
-        self.__Actualiser.setFixedSize(120, 30)
        
         self.__bloc_haut_lay.addWidget(self.__titre)
-        self.__bloc_haut_lay.addWidget(self.__Actualiser)
         self.__bloc_haut_lay.addWidget(self.__Deconnecter)
         self.__bloc_haut.setStyleSheet("background-color: #1E3A5F; color: white;")
 
@@ -88,22 +84,19 @@ class ClientPage(QMainWindow):
         
        
         # ===== BLOC TABLEAU =====
-        self.__bloc_tableau = QTableWidget() #TableWidget n’est pas censé recevoir un layout, ce n’est pas un conteneur.
-       
-        self.__row =  self.__bloc_tableau.rowCount()
-        self.__bloc_tableau.insertRow(self.__row)
+        self.__bloc_tableau = QTableWidget() #TableWidget n’est pas censé recevoir un layout, ce n’est pas un conteneur.       
         self.__bloc_tableau.setColumnCount(5)
-        self.__bloc_tableau.setHorizontalHeaderLabels(["Date" , "Heure", "De", "À", "Description"])
-        self.__bloc_tableau.verticalHeader().setVisible(False)
-      
+        self.__bloc_tableau.setHorizontalHeaderLabels(["Date", "Heure", "De", "À", "Description"])
+        self.__bloc_tableau.verticalHeader().setVisible(False)        
         self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        
         self.__bloc_tableau.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.__bloc_tableau.horizontalHeader().setStretchLastSection(True)
-        
+        self.__bloc_tableau.horizontalHeader().setStretchLastSection(True) 
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
+
         
         self.lecture_seule()
+        self.actualiser()  
+
         
 # ================== FONCTIONS ==================
              
@@ -115,7 +108,25 @@ class ClientPage(QMainWindow):
         self.__bloc_tableau.setEditTriggers( QTableWidget.NoEditTriggers)
 
     def actualiser(self):
-        pass
+        """Recharge les données de la table 'donnees' dans le tableau lecture seule."""
+        try:
+            conn = connexion()
+            cur = conn.cursor()
+            cur.execute("SELECT date, heure, de, a, descriptif FROM donnees ORDER BY id;")
+            rows = cur.fetchall()
+
+            for row_index, row_data in enumerate(rows):
+                if row_index >= self.__bloc_tableau.rowCount():
+                    self.__bloc_tableau.insertRow(row_index)
+                for col_index, value in enumerate(row_data):
+                    self.__bloc_tableau.setItem(row_index, col_index, QTableWidgetItem(str(value)))
+
+        except:
+             QMessageBox.critical(self, "Erreur", "Impossible de charger les données")
+        finally:
+             cur.close()
+             conn.close()
+
         
     def deconnexion(self):
         self.__rep = QMessageBox.question(
@@ -129,16 +140,12 @@ class ClientPage(QMainWindow):
     
         
   
-        
-
 # ================== MAIN ==================    
 def main():
     application = QApplication(sys.argv)
-    window = ClientPage()
+    window = UtilisateurPage()
     window.show()
     sys.exit(application.exec_())
 
 if __name__ == '__main__':
     main()
-
-
