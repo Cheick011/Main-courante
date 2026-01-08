@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -11,6 +12,8 @@ version Nov 12 09:51:19 2025
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
 from PyQt5.QtGui import QIcon, QKeySequence
+from Connexion_dataBase import connexion
+from datetime import datetime
 
 class GestionPage(QMainWindow):
     TITRE_FENETRE = "Page gestionnaire"
@@ -81,20 +84,40 @@ class GestionPage(QMainWindow):
         # ===== BLOC TABLEAU =====
         self.__bloc_tableau = QTableWidget() #TableWidget n’est pas censé recevoir un layout, ce n’est pas un conteneur.
        
-       
-        self.__row =  self.__bloc_tableau.rowCount()
-        self.__bloc_tableau.insertRow(self.__row)
+     
         self.__bloc_tableau.setColumnCount(5)
         self.__bloc_tableau.setHorizontalHeaderLabels(["Date", "Heure", "De", "À", "Description"])
         self.__bloc_tableau.verticalHeader().setVisible(False)        
         self.__bloc_tableau.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        
         self.__bloc_tableau.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.__bloc_tableau.horizontalHeader().setStretchLastSection(True) 
         self.__bloc_tableau_conteneur_lay.addWidget(self.__bloc_tableau)
 
+        self.load_table_from_db()
        
     # ================== FONCTIONS ==================
+    
+   
+    def load_table_from_db(self):
+       try:
+          conn = connexion()
+          cur = conn.cursor()
+          cur.execute("SELECT date, heure, de, a, descriptif FROM donnees;")
+          rows = cur.fetchall()
+
+          self.__bloc_tableau.setRowCount(0)
+          for row_data in rows:
+              row = self.__bloc_tableau.rowCount()
+              self.__bloc_tableau.insertRow(row)
+              for col, value in enumerate(row_data):
+                  self.__bloc_tableau.setItem(row, col, QTableWidgetItem(str(value)))
+       except:
+            QMessageBox.critical(self, "Erreur", f"Impossible de charger les données : ")
+       finally:
+         cur.close()
+         conn.close() 
+
+
     def a_propos(self):       
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
@@ -102,8 +125,39 @@ class GestionPage(QMainWindow):
         self.__row = self.__bloc_tableau.rowCount()
         self.__bloc_tableau.insertRow(self.__row)
         
+        self.__now = datetime.now()
+        self.__bloc_tableau.setItem(self.__row, 0, QTableWidgetItem(self.__now.strftime("%Y-%m-%d")))
+        self.__bloc_tableau.setItem(self.__row, 1, QTableWidgetItem(self.__now.strftime("%H:%M:%S")))
+
+        
     def save_modif(self):
-        pass
+      try:
+        conn = connexion()
+        cur = conn.cursor()
+        for row in range(self.__bloc_tableau.rowCount()):
+          
+            date = self.__bloc_tableau.item(row, 0).text() if self.__bloc_tableau.item(row, 0) else ""
+            heure = self.__bloc_tableau.item(row, 1).text() if self.__bloc_tableau.item(row, 1) else ""
+            de = self.__bloc_tableau.item(row, 2).text() if self.__bloc_tableau.item(row, 2) else ""
+            a = self.__bloc_tableau.item(row, 3).text() if self.__bloc_tableau.item(row, 3) else ""
+            description = self.__bloc_tableau.item(row, 4).text() if self.__bloc_tableau.item(row, 4) else ""
+
+            cur.execute("""
+                INSERT INTO donnees (date, heure, de, a, descriptif)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (id) DO UPDATE
+                SET date=EXCLUDED.date, heure=EXCLUDED.heure,
+                    de=EXCLUDED.de, a=EXCLUDED.a, descriptif=EXCLUDED.descriptif;
+            """, (date, heure, de, a, description))
+        
+        conn.commit()
+        QMessageBox.information(self, "Enregistrement", "Les modifications ont été enregistrées")
+      except:
+        QMessageBox.critical(self, "Erreur", "Impossible de sauvegarder")
+      finally:
+        cur.close()
+        conn.close()
+
         
     def deconnecter(self): 
         self.__rep = QMessageBox.question(
