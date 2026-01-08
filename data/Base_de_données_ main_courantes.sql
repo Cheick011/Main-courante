@@ -6,20 +6,6 @@ Initialisation de la base de données Spelo
    :synopsis: Initialisation de la base de données de l’application Spelo
 .. moduleauthor:: Gatlin ALLOHO <gatlin.alloho@etu.univ-poitiers.fr>
 
-Description
------------
-
-Ce script a pour objectif d’initialiser la base de données PostgreSQL de
-l’application **Spelo**.  
-Il crée la base de données, les tables nécessaires, les rôles utilisateurs
-ainsi que les droits d’accès associés.
-
-Prérequis
----------
-
-- PostgreSQL installé et fonctionnel
-- Accès au compte système ``postgres``
-- Client ``psql`` disponible
 
 sudo -i -u postgres
 psql
@@ -110,6 +96,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO gestionnaire;
 -- Admin : tout, y compris gérer utilisateurs
 GRANT SELECT, INSERT, UPDATE, DELETE ON donnees TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
+
 
 
 
