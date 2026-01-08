@@ -75,11 +75,11 @@ Les dépendances nécessaires sont listées dans le fichier requirements.txt :
 
 Voici une brève explication de l'organisation du projet : 
 
-###### Répertoire data/ 
+##### Répertoire data/ 
 
 Contient les données telles que la structure de la base de donnée, les maquettes, les icones, etc . 
 
-###### Répertoire html/ 
+##### Répertoire html/ 
 
 Stocke les fichiers web générés. 
 
