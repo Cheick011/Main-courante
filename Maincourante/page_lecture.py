@@ -17,7 +17,7 @@ from PyQt5.QtGui import QIcon, QKeySequence
 from Connexion_dataBase import connexion
 
 
-class UtilisateurPage(QMainWindow):
+class ClientPage(QMainWindow):
     TITRE_FENETRE = "Main Courante"
 
     
@@ -25,7 +25,7 @@ class UtilisateurPage(QMainWindow):
         super().__init__()
 
         # ===== FENETRE =====
-        self.setWindowTitle(UtilisateurPage.TITRE_FENETRE)
+        self.setWindowTitle(ClientPage.TITRE_FENETRE)
         self.resize(900, 600)
         
         # ===== MENU =====
@@ -143,7 +143,7 @@ class UtilisateurPage(QMainWindow):
 # ================== MAIN ==================    
 def main():
     application = QApplication(sys.argv)
-    window = UtilisateurPage()
+    window = ClientPage()
     window.show()
     sys.exit(application.exec_())
 
