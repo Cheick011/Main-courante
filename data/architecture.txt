@@ -1,0 +1,13 @@
+UI (PyQt)
+ └── services/
+      └── data_service.py
+           ├── DB locale
+           └── MulticastSender
+                     ↓
+               Réseau multicast
+                     ↓
+           MulticastReceiver
+                     ↓
+               SyncManager
+                     ↓
+                 DB locale
