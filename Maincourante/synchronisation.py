@@ -23,7 +23,7 @@ class SyncManager:
    """
 
 
-    def apply_update(self, msg):
+   def apply_update(self, msg):
        
        """
        Applies a local update based on the received action (add, update, delete).
@@ -35,48 +35,16 @@ class SyncManager:
        :raises Exception: If an error occurs while applying the update.
        """
 
-        action = msg["action"]
-        table = msg["table"]
-        payload = msg["payload"]
+       action = msg["action"]
+       table = msg["table"]
+       payload = msg["payload"]
+       
+       conn = connexion()
+       cur = conn.cursor()
 
-        conn = connexion()
-        cur = conn.cursor()
+ 
 
-        try:
-            if table == "donnees":
-
-                if action == "add":
-                    cur.execute("""
-                        INSERT INTO donnees (id, heure, de, a, descriptif, date, id_utilisateur)
-                        VALUES (%(id)s, %(heure)s, %(de)s, %(a)s, %(descriptif)s, %(date)s, %(id_utilisateur)s)
-                        ON CONFLICT (id) DO NOTHING;
-                    """, payload)
-
-                elif action == "update":
-                    cur.execute("""
-                        UPDATE donnees SET
-                            heure=%(heure)s,
-                            de=%(de)s,
-                            a=%(a)s,
-                            descriptif=%(descriptif)s,
-                            date=%(date)s,
-                            id_utilisateur=%(id_utilisateur)s
-                        WHERE id=%(id)s;
-                    """, payload)
-
-                elif action == "delete":
-                    cur.execute("DELETE FROM donnees WHERE id=%(id)s;", payload)
-
-            conn.commit()
-            print(" Mise à jour locale appliquée")
-
-        except Exception as e:
-            print(" Erreur apply_update :", e)
-
-        cur.close()
-        conn.close()
-
-    def apply_full_sync(self, data):
+   def apply_full_sync(self, data):
        """
        Performs a full synchronization of local data with that of other nodes.
        
@@ -91,7 +59,7 @@ class SyncManager:
        conn = connexion()
        cur = conn.cursor()
 
-        try:
+       try:
             cur.execute("DELETE FROM utilisateurs;")
             cur.execute("DELETE FROM donnees;")
 
@@ -110,8 +78,8 @@ class SyncManager:
             conn.commit()
             print(" FULL SYNC appliqué")
 
-        except Exception as e:
+       except Exception as e:
             print(" Erreur full sync :", e)
 
-        cur.close()
-        conn.close()
+       cur.close()
+       conn.close()

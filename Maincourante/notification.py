@@ -35,7 +35,7 @@ def notify_system(title, message):
    """
    os_name = platform.system().lower()
 
-    try:
+   try:
         if "linux" in os_name:
             subprocess.Popen(["notify-send", title, message])
             subprocess.Popen(["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"])
@@ -51,6 +51,6 @@ def notify_system(title, message):
         else:
             print(f"[NOTIF] {title} : {message}")
 
-    except Exception as e:
+   except Exception as e:
         print("Erreur notification :", e)
         print(f"[NOTIF] {title} : {message}")
