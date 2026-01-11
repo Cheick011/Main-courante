@@ -38,17 +38,12 @@ class AdminPage(QMainWindow):
 
     def __init__(self):
     """
-    Initialise la fenêtre d'administration.
+    Initializes the administrator page.
 
-    Cette méthode configure :
-    - la fenêtre principale,
-    - les menus et actions,
-    - les différents blocs graphiques,
-    - les connexions entre boutons et méthodes,
-    - le chargement initial des utilisateurs depuis la base de données.
-
-    Elle est appelée automatiquement à l'instanciation de la classe.
+    This method sets up the main window, menus, graphical layouts,
+    signal connections and loads existing users from the database.
     """
+
 
         super().__init__()
         
@@ -140,10 +135,17 @@ class AdminPage(QMainWindow):
     # ================== FONCTIONS ==================
 
     def load_utilisateurs_from_db(self):
-      """
-   Charge tous les utilisateurs depuis la base de données
-   et les affiche dans le bloc de gestion des droits.
-      """
+   
+    """
+    Loads all users from the database.
+
+    This method retrieves all user accounts stored in the PostgreSQL
+    database and displays them in the user management section
+    of the administration interface.
+
+    :raises Exception: If a database connection or query error occurs.
+    """
+
       try:
         conn = connexion()
         cur = conn.cursor()
@@ -160,14 +162,24 @@ class AdminPage(QMainWindow):
             user_widget = self.creer_widget_utilisateur(nom, mdp, role)
             self.__bloc_gestion_droits_lay.addWidget(user_widget)
 
-      except Exception as e:
-        QMessageBox.critical(self, "Erreur", f"Impossible de charger les utilisateurs : {e}")
+      except :
+        QMessageBox.critical(self, "Erreur", "Impossible de charger les utilisateurs ")
        
       finally:
         cur.close()
         conn.close()
 
     def creer_utilisateur(self):
+  
+    """
+    Creates a user entry in the administration interface.
+
+    This method validates the username and password input fields
+    and adds a new user widget to the user management area.
+
+    :raises ValueError: If the username or password field is empty.
+    """
+
         nom = self.__lineedit_nom.text().strip()
         mdp = self.__lineedit_mdp.text().strip()
 
@@ -192,6 +204,22 @@ class AdminPage(QMainWindow):
         )
 
     def creer_widget_utilisateur(self, nom, mdp, role="lecteur"):
+    """
+    Creates a graphical widget representing a user account.
+
+    The widget allows the administrator to modify the user's password,
+    change the assigned role and delete the account.
+
+    :param nom: Username.
+    :type nom: str
+    :param mdp: User password.
+    :type mdp: str
+    :param role: User role (lecteur, gestionnaire, admin).
+    :type role: str
+    :return: Configured user widget.
+    :rtype: QWidget
+    """
+
         self.__widget = QWidget()
         self.__layout = QHBoxLayout(self.__widget)
 
@@ -226,6 +254,18 @@ class AdminPage(QMainWindow):
         return self.__widget
 
     def supprimer(self, widget, nom):
+    """
+    Deletes a user account after confirmation.
+
+    This method displays a confirmation dialog, removes the user
+    from the database and deletes the associated widget from the interface.
+
+    :param widget: User widget to remove.
+    :type widget: QWidget
+    :param nom: Username to delete.
+    :type nom: str
+    """
+
         self.__reponse = QMessageBox.question(
             self,
             "Suppression",
@@ -239,8 +279,8 @@ class AdminPage(QMainWindow):
               cur = conn.cursor()
               cur.execute("DELETE FROM utilisateurs WHERE nom_utilisateur=%s;", (nom,))
               conn.commit()
-            except Exception as e:
-              QMessageBox.critical(self, "Erreur", f"Impossible de supprimer : {e}")
+            except :
+              QMessageBox.critical(self, "Erreur", "Impossible de supprimer ")
             finally:
               cur.close()
               conn.close()
@@ -248,6 +288,16 @@ class AdminPage(QMainWindow):
             widget.deleteLater()
 
     def valider(self):
+    """
+    Saves and synchronizes user accounts.
+
+    This method inserts or updates all user accounts displayed
+    in the interface into the local database and sends the updates
+    to other connected machines over the network.
+
+    :raises Exception: If a database or network synchronization error occurs.
+    """
+
         try:
             conn = connexion()
             cur = conn.cursor()
@@ -305,11 +355,27 @@ class AdminPage(QMainWindow):
 
 
     def bouton_gestion(self):
+      
+    """
+    Opens the manager page.
+
+    This method closes the administration page and displays
+    the manager interface.
+    """
+
         self.page_gestion = GestionPage()
         self.page_gestion.show()
         self.close()
 
     def deconnexion(self):
+
+    """
+    Handles administrator logout.
+
+    A confirmation dialog is displayed before closing
+    the administration window.
+    """
+
         self.__rep = QMessageBox.question(
             self,
             "Déconnexion",
@@ -319,7 +385,14 @@ class AdminPage(QMainWindow):
         if self.__rep == QMessageBox.Yes:
             self.close()      
     
-    def a_propos(self):          
+    def a_propos(self): 
+    """
+    Displays application information.
+
+    This method shows a dialog containing general information
+    about the application and its development context.
+    """
+
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunications promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 
 # ================== MAIN ==================
