@@ -4,18 +4,17 @@
 """
 .. module:: page_admin
    :platform: Unix, Windows
-   :synopsis: Interface graphique d'administration pour la gestion des comptes
-              utilisateurs de l'application de saisie de la main courante
-              du Spéléo-Secours Français (SSF).
+   :synopsis: Administration interface for managing user accounts in the
+              SSF main log application.
 
-Cette interface est utilisée au Poste de Commandement (PC) lors
-des opérations de secours souterrain afin de garantir un accès
-contrôlé à la main courante.
+This module provides the graphical administration page of the application.
+It allows administrators to create, update and delete user accounts,
+assign roles (reader, manager, administrator) and synchronize user data
+between multiple workstations over the local network.
 
 .. moduleauthor:: Adja
 .. moduleauthor:: Marème
 """
-
 
 
 import sys
@@ -28,19 +27,13 @@ from envoie import Envoie
 
 class AdminPage(QMainWindow):
     """
-    Fenêtre principale de l'interface administrateur.
+    Main administration window.
 
-    Cette classe définit l'interface graphique permettant
-    à un administrateur du SSF de gérer les comptes utilisateurs
-    de l'application de main courante :
-    - création de comptes,
-    - attribution des rôles (lecteur, gestionnaire, admin),
-    - suppression de comptes,
-    - synchronisation des données sur le réseau local.
-
-    Hérite de :class:`PyQt5.QtWidgets.QMainWindow`.
+    This class implements the graphical interface used by administrators
+    to manage application user accounts, including account creation,
+    role management, deletion and synchronization with other machines.
     """
-
+   
     TITRE_FENETRE = "Page administrateur"
 
     def __init__(self):
