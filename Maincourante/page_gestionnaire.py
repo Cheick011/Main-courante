@@ -28,6 +28,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy, QHeaderView, QMessageBox, QAction, QMenuBar
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QKeySequence
 from datetime import datetime
 from Connexion_dataBase import connexion
 from envoie import Envoie
@@ -64,9 +65,9 @@ class GestionPage(QMainWindow):
         self.__help = self.__menuBar.addMenu('&Apropos')
         self.__settings = self.__menuBar.addMenu('&Paramètres')
 
-        self.__action_apropos = QAction('A propos', self)
-        self.__action_add_line = QAction('Ajouter une ligne', self)
-        self.__action_save = QAction('Enregistrer les modifications', self)
+        self.__action_apropos = QAction(QIcon('actions/logo-a-propos.png'), 'A propos', self)
+        self.__action_add_line = QAction(QIcon('actions/list-add.png'), 'Ajouter une ligne', self)
+        self.__action_save = QAction(QIcon('actions/document-save.png'), 'Enregistrer les modifications', self)
 
         self.__help.addAction(self.__action_apropos)
         self.__settings.addAction(self.__action_add_line)
