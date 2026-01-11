@@ -270,8 +270,8 @@ class AdminPage(QMainWindow):
             #  Rafraîchir l’affichage
             self.load_utilisateurs_from_db()
 
-        except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Erreur sauvegarde : {e}")
+        except:
+            QMessageBox.critical(self, "Erreur", "Erreur sauvegarde ")
 
         finally:
             cur.close()
