@@ -14,6 +14,9 @@ It allows users with the manager role to:
 - modify existing entries,
 - save changes to the database,
 - synchronize data with other workstations over the network.
+
+.. moduleauthor:: Adja
+.. moduleauthor:: Marème
 """
 
 
@@ -31,9 +34,25 @@ from envoie import Envoie
 
 
 class GestionPage(QMainWindow):
+    """
+    Main manager window.
+
+    This class implements the graphical interface used by managers
+    to consult and update the main log entries. Users can add new rows,
+    modify existing entries, save changes to the local database, and
+    synchronize updates with other connected machines.
+    """
+
     TITRE_FENETRE = "Page gestionnaire"
 
     def __init__(self):
+        """
+    Initializes the manager page interface.
+
+    This method sets up the main window, menus, graphical layouts,
+    signal connections, and loads the current main log entries
+    from the database.
+    """
         super().__init__()
         self.setWindowTitle(GestionPage.TITRE_FENETRE)
         self.resize(900, 600)
@@ -93,7 +112,16 @@ class GestionPage(QMainWindow):
     # ================== FONCTIONS ==================
 
     def load_table_from_db(self):
-        """Charge le contenu de la table 'donnees' dans le tableau."""
+       """
+    Loads main log entries from the database into the table.
+
+    This function retrieves all rows from the 'donnees' table
+    and populates the QTableWidget with the data. The entry ID is
+    stored in the Qt.UserRole of the first cell of each row.
+
+    :raises Exception: If a database connection or query fails.
+    """
+
         try:
             conn = connexion()
             cur = conn.cursor()
@@ -118,11 +146,23 @@ class GestionPage(QMainWindow):
             conn.close()
 
     def a_propos(self):
+        """
+    Displays application information.
+
+    This function shows a message box with information about
+    the project and its development context.
+    """
         QMessageBox.information(self, 'A propos',
                                 'Cette application a été développée par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunication, SAÉ 2025-2026.')
 
     def add_line(self):
-        """Ajoute une nouvelle ligne au tableau avec la date et l'heure actuelles."""
+   
+        """
+    Adds a new row to the main log table.
+
+    The new row is initialized with the current date and time.
+    The row ID is initially set to None until saved to the database.
+    """
         row = self.__bloc_tableau.rowCount()
         self.__bloc_tableau.insertRow(row)
         now = datetime.now()
@@ -132,7 +172,17 @@ class GestionPage(QMainWindow):
         self.__bloc_tableau.setItem(row, 1, QTableWidgetItem(now.strftime("%H:%M:%S")))
 
     def save_modif(self):
-        """Sauvegarde les modifications dans la DB et envoie via le réseau."""
+       """
+    Saves modifications to the database and sends updates over the network.
+
+    This function iterates through all rows of the table, inserting
+    new entries or updating existing ones based on the stored ID.
+    After database operations, each change is sent to other workstations
+    using the network synchronization system.
+
+    :raises Exception: If a database or network error occurs.
+    """
+
         try:
             conn = connexion()
             cur = conn.cursor()
@@ -199,6 +249,11 @@ class GestionPage(QMainWindow):
             conn.close()
 
     def deconnecter(self):
+       """
+    Handles manager logout.
+
+    A confirmation dialog is displayed before closing the manager window.
+    """
         rep = QMessageBox.question(self, "Déconnexion", "Voulez-vous vous déconnecter ?", QMessageBox.Yes | QMessageBox.No)
         if rep == QMessageBox.Yes:
             self.close()
