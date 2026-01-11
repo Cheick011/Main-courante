@@ -1,11 +1,21 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan  7 13:10:13 2026
+.. module:: page_admin
+   :platform: Unix, Windows
+   :synopsis: Interface graphique d'administration pour la gestion des comptes
+              utilisateurs de l'application de saisie de la main courante
+              du Spéléo-Secours Français (SSF).
 
-@authors: adja, Marème
+Cette interface est utilisée au Poste de Commandement (PC) lors
+des opérations de secours souterrain afin de garantir un accès
+contrôlé à la main courante.
 
+.. moduleauthor:: Adja
+.. moduleauthor:: Marème
 """
+
 
 
 import sys
@@ -17,10 +27,36 @@ from envoie import Envoie
 
 
 class AdminPage(QMainWindow):
+    """
+    Fenêtre principale de l'interface administrateur.
+
+    Cette classe définit l'interface graphique permettant
+    à un administrateur du SSF de gérer les comptes utilisateurs
+    de l'application de main courante :
+    - création de comptes,
+    - attribution des rôles (lecteur, gestionnaire, admin),
+    - suppression de comptes,
+    - synchronisation des données sur le réseau local.
+
+    Hérite de :class:`PyQt5.QtWidgets.QMainWindow`.
+    """
+
     TITRE_FENETRE = "Page administrateur"
 
-    
     def __init__(self):
+    """
+    Initialise la fenêtre d'administration.
+
+    Cette méthode configure :
+    - la fenêtre principale,
+    - les menus et actions,
+    - les différents blocs graphiques,
+    - les connexions entre boutons et méthodes,
+    - le chargement initial des utilisateurs depuis la base de données.
+
+    Elle est appelée automatiquement à l'instanciation de la classe.
+    """
+
         super().__init__()
         
         self.setWindowTitle("Page Admin")
@@ -121,13 +157,12 @@ class AdminPage(QMainWindow):
         cur.execute("SELECT nom_utilisateur,mot_de_passe, role FROM utilisateurs;")
         rows = cur.fetchall()
         
-        # Vider l'affichage actuel
         for i in reversed(range(self.__bloc_gestion_droits_lay.count())):
             widget = self.__bloc_gestion_droits_lay.itemAt(i).widget()
             if widget is not None:
                 widget.deleteLater()
 
-        # Ajouter tous les utilisateurs
+        
         for nom, mdp, role in rows:
             user_widget = self.creer_widget_utilisateur(nom, mdp, role)
             self.__bloc_gestion_droits_lay.addWidget(user_widget)
@@ -236,7 +271,6 @@ class AdminPage(QMainWindow):
                 if not nom or not mdp or not role:
                     continue
 
-                #  DB locale (INSERT ou UPDATE)
                 cur.execute("""
                     INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, role)
                     VALUES (%s, %s, %s)
@@ -246,7 +280,7 @@ class AdminPage(QMainWindow):
                         role = EXCLUDED.role;
                 """, (nom, mdp, role))
 
-                #  Réseau
+                  # ================== F ==================
                 Envoie.send(
                     "utilisateur",  # type
                     "UPDATE",       # action
@@ -267,7 +301,6 @@ class AdminPage(QMainWindow):
                 "Utilisateurs enregistrés et synchronisés"
             )
 
-            #  Rafraîchir l’affichage
             self.load_utilisateurs_from_db()
 
         except:
