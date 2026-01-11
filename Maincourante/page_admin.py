@@ -12,8 +12,8 @@ It allows administrators to create, update and delete user accounts,
 assign roles (reader, manager, administrator) and synchronize user data
 between multiple workstations over the local network.
 
-.. moduleauthor:: Adja
-.. moduleauthor:: Marème
+.. moduleauthor:: Adja Diarietou Mbengue <adja.diarietou.mbengue@etu.univ-poitiers.fr>
+.. moduleauthor:: Marème Mboup <mareme.mboup@etu.univ-poitiers.fr>
 """
 
 
