@@ -99,8 +99,18 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON utilisateurs TO admin;
 
 
 
+.. code-block:: sql
 
+   CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+.. code-block:: sql
+
+CREATE OR REPLACE FUNCTION hash_mot_de_passe(mdp TEXT)
+RETURNS TEXT AS $$
+BEGIN
+RETURN encode(digest(mdp, ‘tiger’), ‘hex’);
+END;
+$$ LANGUAGE plpgsql;
 
 
 
