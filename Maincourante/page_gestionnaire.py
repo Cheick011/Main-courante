@@ -136,11 +136,11 @@ class GestionPage(QMainWindow):
                 for col, value in enumerate(row_data[1:]):
                     item = QTableWidgetItem(str(value))
                     if col == 0:
-                        # Stocke l'ID dans Qt.UserRole sur la première cellule
+                       
                         item.setData(Qt.UserRole, id_donnee)
                     self.__bloc_tableau.setItem(row, col, item)
-        except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Impossible de charger les données : {e}")
+        except:
+            QMessageBox.critical(self, "Erreur", "Impossible de charger les données ")
         finally:
             cur.close()
             conn.close()
