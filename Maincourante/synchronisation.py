@@ -20,23 +20,17 @@ from Connexion_dataBase import connexion
 from config import PEERS, PORT
 
 
-class synchro:
+class Synchro:
     """
-    Network synchronization manager.
-
-    Handles full database synchronization requests and applies received
-    data to the local database by overwriting existing content.
+    Full synchronization manager.
     """
 
-    def synchrocomplete(self, peer_ip: str) -> Optional[dict]:
+    def request_full_sync(self, peer_ip: str) -> Optional[dict]:
         """
-        Request a full database synchronization from a peer.
-
-        Args:
-            peer_ip (str): IP address of the peer.
+        Request full database sync from a peer.
 
         Returns:
-            dict or None: Full database payload if successful, None otherwise.
+            dict or None
         """
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -48,11 +42,10 @@ class synchro:
                 "payload": None
             }
 
-            sock.sendto(json.dumps(message).encode("utf-8"), (peer_ip, PORT))
-
+            sock.sendto(json.dumps(message).encode(), (peer_ip, PORT))
             data, _ = sock.recvfrom(65536)
-            response = json.loads(data.decode("utf-8"))
 
+            response = json.loads(data.decode())
             return response.get("payload")
 
         except Exception as e:
@@ -62,29 +55,21 @@ class synchro:
         finally:
             sock.close()
 
-    def appliquer_synchro(self, data: dict):
+    def apply_full_sync(self, data: dict):
         """
-        Apply a full synchronization payload to the local database.
-
-        This method completely clears existing tables and reinserts
-        all received data.
-
-        Args:
-            data (dict): Dictionary containing 'utilisateurs' and 'donnees'.
+        Completely overwrite local database with received data.
         """
         if not data:
-            print("[SYNC] No data to apply")
+            print("[SYNC] No data received")
             return
 
         conn = connexion()
         cur = conn.cursor()
 
         try:
-            # Clear tables (respect foreign keys order)
             cur.execute("DELETE FROM donnees;")
             cur.execute("DELETE FROM utilisateurs;")
 
-            # Insert users
             for u in data.get("utilisateurs", []):
                 cur.execute("""
                     INSERT INTO utilisateurs
@@ -98,7 +83,6 @@ class synchro:
                     u["date_creation"]
                 ))
 
-            # Insert data records
             for d in data.get("donnees", []):
                 cur.execute("""
                     INSERT INTO donnees
@@ -115,11 +99,11 @@ class synchro:
                 ))
 
             conn.commit()
-            print("[SYNC] Full synchronization successfully applied")
+            print("[SYNC] Full synchronization applied")
 
         except Exception as e:
             conn.rollback()
-            print("[SYNC] Error while applying synchronization:", e)
+            print("[SYNC] Error:", e)
 
         finally:
             cur.close()
@@ -127,18 +111,13 @@ class synchro:
 
     def start_sync(self):
         """
-        Attempt to fetch and apply a full database synchronization
-        from the first available peer.
+        Run full sync once at startup.
         """
-        print("[SYNC] Starting synchronization process...")
-
-        for peer_ip in PEERS:
-            print(f"[SYNC] Contacting peer {peer_ip}...")
-            data = self.synchrocomplete(peer_ip)
-
+        print("[SYNC] Starting full sync...")
+        for peer in PEERS:
+            data = self.request_full_sync(peer)
             if data:
-                print(f"[SYNC] Synchronization received from {peer_ip}")
-                self.appliquer_synchro(data)
-                break
-        else:
-            print("[SYNC] No peers responded. Local database unchanged.")
+                self.apply_full_sync(data)
+                return
+        print("[SYNC] No peer responded")
+
