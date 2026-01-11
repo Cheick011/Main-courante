@@ -1,3 +1,4 @@
+
 import socket
 import json
 from config import PEERS, PORT
@@ -5,50 +6,32 @@ from config import PEERS, PORT
 
 class Envoie:
     """
-    UDP network sender to broadcast messages to configured peers.
-
-    This class provides a static method to send structured JSON messages
-    to all IPs defined in the PEERS configuration. Each message contains:
-
+    Network sender for partial database updates.
     """
-    def __init__(self):
-        """
-        Initialization.
-        """
 
     @staticmethod
     def send(msg_type: str, action: str, payload: dict):
         """
-        Sends a structured JSON message to all known peers.
+        Send a UDP message to all peers.
 
         Args:
-            msg_type (str): The type of the message ("utilisateur" or "donnee").
-            action (str): The action performed ("INSERT", "UPDATE", "DELETE").
-            payload (dict): The data payload for the action.
-
-        Exceptions:
-            Any JSON encoding or network errors are caught and printed.
+            msg_type (str): Message type (donnee, utilisateur, sync)
+            action (str): INSERT, UPDATE, DELETE, REQUEST, RESPONSE
+            payload (dict): Data payload
         """
-
         message = {
             "type": msg_type,
             "action": action,
             "payload": payload
         }
 
-        try:
-            data = json.dumps(message).encode("utf-8")
-        except Exception as e:
-            print("Erreur encodage JSON :", e)
-            return
+        data = json.dumps(message).encode("utf-8")
 
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-        for ip in PEERS:
+        for peer in PEERS:
             try:
-                sock.sendto(data, (ip, PORT))
-                print(f"Message envoyé à {ip}:{PORT}")
+                sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                sock.sendto(data, (peer, PORT))
+                sock.close()
             except Exception as e:
-                print(f"Erreur envoi vers {ip} :", e)
+                print(f"[SEND] Failed to send to {peer}: {e}")
 
-        sock.close()
