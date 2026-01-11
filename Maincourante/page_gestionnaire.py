@@ -65,9 +65,9 @@ class GestionPage(QMainWindow):
         self.__help = self.__menuBar.addMenu('&Apropos')
         self.__settings = self.__menuBar.addMenu('&Paramètres')
 
-        self.__action_apropos = QAction(QIcon('actions/icone_3.png'), 'A propos', self)
-        self.__action_add_line = QAction(QIcon('actions/icone_1.png'), 'Ajouter une ligne', self)
-        self.__action_save = QAction(QIcon('actions/icone_2.png'), 'Enregistrer les modifications', self)
+        self.__action_apropos = QAction(QIcon('actions/icone_3.jpeg'), 'A propos', self)
+        self.__action_add_line = QAction(QIcon('actions/icone_1.jpeg'), 'Ajouter une ligne', self)
+        self.__action_save = QAction(QIcon('actions/icone_2.jpeg'), 'Enregistrer les modifications', self)
 
         self.__help.addAction(self.__action_apropos)
         self.__settings.addAction(self.__action_add_line)
