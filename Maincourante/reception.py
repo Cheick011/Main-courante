@@ -226,4 +226,4 @@ class Reception(QObject):
             "utilisateurs": utilisateurs,
             "donnees": donnees
         }
-        }
+        
