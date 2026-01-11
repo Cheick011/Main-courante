@@ -2,14 +2,22 @@
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-version Nov 12 09:51:19 2025
-
-@author 1:adja
-@author 2: Marème
-
 
 """
+.. module:: page_lecture
+   :platform: Unix, Windows
+   :synopsis: Read-only interface for viewing main log entries in the
+              SSF main log application.
+
+This module provides the graphical interface for users with the
+read-only profile. It allows users to:
+- view all main log entries,
+- refresh the table with the latest data from the database,
+- log out of the application.
+
+No modifications to the database are allowed from this interface.
+"""
+
 
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBar,QMenu,QToolBar,QWidget, QAction, QMessageBox, QLineEdit,QFormLayout,QVBoxLayout,QHBoxLayout, QPushButton, QGroupBox, QTableWidget, QTableWidgetItem, QSizePolicy, QHeaderView
