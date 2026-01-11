@@ -61,7 +61,7 @@ class ClientPage(QMainWindow):
         
         
         # ===== ACTIONS =====
-        self.__action_apropos = QAction(QIcon('actions/stock_search.png'),'A propos', self)
+        self.__action_apropos = QAction(QIcon('actions/logo-a-propos.png'),'A propos', self)
 
         
         self.__help.addAction(self.__action_apropos)
