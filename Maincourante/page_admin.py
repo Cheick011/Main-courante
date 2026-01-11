@@ -247,15 +247,15 @@ class AdminPage(QMainWindow):
                 """, (nom, mdp, role))
 
                 #  Réseau
-                Envoie.send({
-                    "type": "utilisateur",
-                    "action": "UPDATE",
-                    "payload": {
+                Envoie.send(
+                    "utilisateur",  # type
+                    "UPDATE",       # action
+                    {
                         "nom": nom,
                         "mdp": mdp,
                         "role": role
-                    }
-                })
+                    }                # payload
+                )
 
             conn.commit()
 
