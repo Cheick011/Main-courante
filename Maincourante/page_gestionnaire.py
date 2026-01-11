@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
-GestionPage - Page du gestionnaire
-Version : corrigée pour éviter duplication des lignes lors de la modification
-Auteur : Adja & Marème
+.. module:: page_gestionnaire
+   :platform: Unix, Windows
+   :synopsis: Manager interface for viewing and modifying the main log
+              entries of the SSF main log application.
+
+This module provides the graphical manager page of the application.
+It allows users with the manager role to:
+- view main log entries,
+- add new entries with current date and time,
+- modify existing entries,
+- save changes to the database,
+- synchronize data with other workstations over the network.
 """
+
 
 import sys
 from PyQt5.QtWidgets import (
