@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: notification
+   :platform: Unix, Windows
+   :synopsis: Module 
+"""
 
 import socket
 import json
