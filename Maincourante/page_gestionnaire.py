@@ -15,8 +15,8 @@ It allows users with the manager role to:
 - save changes to the database,
 - synchronize data with other workstations over the network.
 
-.. moduleauthor:: Adja
-.. moduleauthor:: Marème
+.. moduleauthor:: Adja Diarietou Mbengue <adja.diarietou.mbengue@etu.univ-poitiers.fr>
+.. moduleauthor:: Marème Mboup <mareme.mboup@etu.univ-poitiers.fr>
 """
 
 
