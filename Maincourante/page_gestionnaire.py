@@ -194,7 +194,7 @@ class GestionPage(QMainWindow):
                 a_item = self.__bloc_tableau.item(row, 3)
                 desc_item = self.__bloc_tableau.item(row, 4)
 
-                # Ignore les lignes vides
+         
                 if not date_item or not heure_item:
                     continue
 
@@ -207,7 +207,7 @@ class GestionPage(QMainWindow):
                 id_donnee = date_item.data(Qt.UserRole)
 
                 if id_donnee is None:
-                    # INSERT
+               
                     cur.execute("""
                         INSERT INTO donnees (date, heure, de, a, descriptif)
                         VALUES (%s,%s,%s,%s,%s)
@@ -217,7 +217,7 @@ class GestionPage(QMainWindow):
                     date_item.setData(Qt.UserRole, id_donnee)
                     action = "INSERT"
                 else:
-                    # UPDATE
+                  
                     cur.execute("""
                         UPDATE donnees
                         SET date=%s, heure=%s, de=%s, a=%s, descriptif=%s
