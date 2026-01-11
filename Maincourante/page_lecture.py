@@ -136,7 +136,7 @@ class ClientPage(QMainWindow):
             QMessageBox.Yes | QMessageBox.No
         )
         if self.__rep == QMessageBox.Yes:
-            self.close()      
+            self.close()     
     
         
   
