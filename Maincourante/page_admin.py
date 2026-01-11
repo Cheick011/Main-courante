@@ -56,7 +56,7 @@ class AdminPage(QMainWindow):
         self.__help = self.__menuBar.addMenu('&Apropos')
         
          # ===== Actions ===== 
-        self.__action_apropos = QAction(QIcon('actions/icone_3.png'),'A propos', self)
+        self.__action_apropos = QAction(QIcon('actions/icone_3.jpeg'),'A propos', self)
         self.__help.addAction(self.__action_apropos)
         self.__action_apropos.triggered.connect(self.a_propos)
         
