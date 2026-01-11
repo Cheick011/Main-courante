@@ -11,75 +11,75 @@
 
 """
 
+
+
+
 from Connexion_dataBase import connexion
 
-class SyncManager:
-   """
-   Data synchronization manager between nodes.
-   
-   This class allows applying partial updates (add, update, delete)
-   to the local data as well as performing full synchronization
-   with other machines.
-   """
+class synchro:
+
+    """
+    Full database synchronization manager for replacing local data with
+    peer data.
+    """
+    def __init__(self):
+        """
+        Initialization.
+        """
+
+    def synchro_Complete(self, data):
+        """
+        Applies a full synchronization to the local database.
+
+        Deletes all existing records in 'utilisateurs' and 'donnees' tables,
+        and inserts the records provided in the 'data' dictionary.
+
+        Args:
+            data (dict): Dictionary containing two keys:
+                - "utilisateurs": list of user records
+                - "donnees": list of data records
+
+        Exceptions:
+            Any database error triggers a rollback and is printed.
+        """
 
 
-   def apply_update(self, msg):
-       
-       """
-       Applies a local update based on the received action (add, update, delete).
-       This method processes multicast messages and applies the changes
-       to the local database in the ``donnees`` table.
-       
-       :param msg: Received message containing the details of the action to apply.
-       :type msg: dict
-       :raises Exception: If an error occurs while applying the update.
-       """
+        conn = connexion()
+        cur = conn.cursor()
 
-       action = msg["action"]
-       table = msg["table"]
-       payload = msg["payload"]
-       
-       conn = connexion()
-       cur = conn.cursor()
-
- 
-
-   def apply_full_sync(self, data):
-       """
-       Performs a full synchronization of local data with that of other nodes.
-       
-       This method clears all local data in the ``utilisateurs`` and ``donnees`` tables
-       and replaces it with data received from another node, ensuring complete consistency
-       across machines.
-       
-       :param data: Data to synchronize, including the ``utilisateurs`` and ``donnees`` tables.
-       :type data: dict
-       :raises Exception: If an error occurs while applying the synchronization.
-       """
-       conn = connexion()
-       cur = conn.cursor()
-
-       try:
+        try:
             cur.execute("DELETE FROM utilisateurs;")
             cur.execute("DELETE FROM donnees;")
 
             for u in data["utilisateurs"]:
                 cur.execute("""
-                    INSERT INTO utilisateurs (id, nom_utilisateur, mot_de_passe, role, date_creation)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (u["id"], u["nom_utilisateur"], u["mot_de_passe"], u["role"], u["date_creation"]))
+                    INSERT INTO utilisateurs
+                    (id, nom_utilisateur, mot_de_passe, role, date_creation)
+                    VALUES (%s,%s,%s,%s,%s)
+                """, (
+                    u["id"], u["nom_utilisateur"],
+                    u["mot_de_passe"], u["role"],
+                    u["date_creation"]
+                ))
 
             for d in data["donnees"]:
                 cur.execute("""
-                    INSERT INTO donnees (id, heure, de, a, descriptif, date, id_utilisateur)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """, (d["id"], d["heure"], d["de"], d["a"], d["descriptif"], d["date"], d["id_utilisateur"]))
+                    INSERT INTO donnees
+                    (id, date, heure, de, a, descriptif, id_utilisateur)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s)
+                """, (
+                    d["id"], d["date"], d["heure"],
+                    d["de"], d["a"], d["descriptif"],
+                    d["id_utilisateur"]
+                ))
 
             conn.commit()
-            print(" FULL SYNC appliqué")
+            print("Synchronisation complète appliquée")
 
-       except Exception as e:
-            print(" Erreur full sync :", e)
+        except Exception as e:
+            conn.rollback()
+            print("Erreur sync complète :", e)
 
-       cur.close()
-       conn.close()
+        finally:
+            cur.close()
+            conn.close()
