@@ -14,105 +14,131 @@ It ensures the local database is consistent with a responding peer.
 
 import socket
 import json
+from typing import Optional
+
 from Connexion_dataBase import connexion
 from config import PEERS, PORT
-import threading
+
 
 class synchro:
     """
-    Manager for network synchronization.
+    Network synchronization manager.
 
-    Handles requesting full database synchronization from peers
-    and applying received data to the local database.
+    Handles full database synchronization requests and applies received
+    data to the local database by overwriting existing content.
     """
 
-    def synchrocomplete(self, peer_ip: str) -> dict | None:
+    def synchrocomplete(self, peer_ip: str) -> Optional[dict]:
         """
-        Sends a FULL_SYNC request to a peer and waits for the response.
+        Request a full database synchronization from a peer.
 
-        :param peer_ip: IP address of the peer to query.
-        :type peer_ip: str
-        :return: A dictionary containing 'utilisateurs' and 'donnees' if successful, None otherwise.
-        :rtype: dict | None
+        Args:
+            peer_ip (str): IP address of the peer.
+
+        Returns:
+            dict or None: Full database payload if successful, None otherwise.
         """
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.settimeout(5)  # 5-second timeout
-            message = {"type": "sync", "action": "FULL_SYNC", "payload": None}
+            sock.settimeout(5)
+
+            message = {
+                "type": "sync",
+                "action": "REQUEST",
+                "payload": None
+            }
+
             sock.sendto(json.dumps(message).encode("utf-8"), (peer_ip, PORT))
-            
-            data, _ = sock.recvfrom(65536)  # Maximum message size
-            response = json.loads(data.decode())
-            return response.get("payload", None)
+
+            data, _ = sock.recvfrom(65536)
+            response = json.loads(data.decode("utf-8"))
+
+            return response.get("payload")
+
         except Exception as e:
-            print(f"[SYNC] Peer {peer_ip} unavailable: {e}")
+            print(f"[SYNC] Peer {peer_ip} unreachable: {e}")
             return None
+
         finally:
             sock.close()
 
     def appliquer_synchro(self, data: dict):
         """
-        Applies the data received from a peer to the local database.
+        Apply a full synchronization payload to the local database.
 
-        :param data: Dictionary containing 'utilisateurs' and 'donnees'.
-        :type data: dict
+        This method completely clears existing tables and reinserts
+        all received data.
+
+        Args:
+            data (dict): Dictionary containing 'utilisateurs' and 'donnees'.
         """
         if not data:
-            print("[SYNC] No data to synchronize")
+            print("[SYNC] No data to apply")
             return
 
         conn = connexion()
         cur = conn.cursor()
+
         try:
-            # Clear local data
-            cur.execute("DELETE FROM utilisateurs;")
+            # Clear tables (respect foreign keys order)
             cur.execute("DELETE FROM donnees;")
+            cur.execute("DELETE FROM utilisateurs;")
 
             # Insert users
-            for u in data["utilisateurs"]:
+            for u in data.get("utilisateurs", []):
                 cur.execute("""
                     INSERT INTO utilisateurs
                     (id, nom_utilisateur, mot_de_passe, role, date_creation)
                     VALUES (%s,%s,%s,%s,%s)
-                """, (u["id"], u["nom_utilisateur"], u["mot_de_passe"], u["role"], u["date_creation"]))
+                """, (
+                    u["id"],
+                    u["nom_utilisateur"],
+                    u["mot_de_passe"],
+                    u["role"],
+                    u["date_creation"]
+                ))
 
-            # Insert data entries
-            for d in data["donnees"]:
+            # Insert data records
+            for d in data.get("donnees", []):
                 cur.execute("""
                     INSERT INTO donnees
                     (id, date, heure, de, a, descriptif, id_utilisateur)
                     VALUES (%s,%s,%s,%s,%s,%s,%s)
-                """, (d["id"], d["date"], d["heure"], d["de"], d["a"], d["descriptif"], d["id_utilisateur"]))
+                """, (
+                    d["id"],
+                    d["date"],
+                    d["heure"],
+                    d["de"],
+                    d["a"],
+                    d["descriptif"],
+                    d["id_utilisateur"]
+                ))
 
             conn.commit()
-            print("[SYNC] Full synchronization applied successfully")
+            print("[SYNC] Full synchronization successfully applied")
+
         except Exception as e:
             conn.rollback()
-            print("[SYNC] Error applying full sync:", e)
+            print("[SYNC] Error while applying synchronization:", e)
+
         finally:
             cur.close()
             conn.close()
 
     def start_sync(self):
         """
-        Attempts to fetch the full database from peers listed in config.PEERS
-        until a response is obtained. If no peer responds, the local database
-        is kept.
+        Attempt to fetch and apply a full database synchronization
+        from the first available peer.
         """
-        print("[SYNC] Starting network synchronization...")
+        print("[SYNC] Starting synchronization process...")
+
         for peer_ip in PEERS:
-            print(f"[SYNC] Querying peer {peer_ip}...")
-            data = self.request_full_sync(peer_ip)
+            print(f"[SYNC] Contacting peer {peer_ip}...")
+            data = self.synchrocomplete(peer_ip)
+
             if data:
-                print(f"[SYNC] Peer {peer_ip} responded, applying data...")
-                self.apply_full_sync(data)
+                print(f"[SYNC] Synchronization received from {peer_ip}")
+                self.appliquer_synchro(data)
                 break
         else:
-            print("[SYNC] No peers responded. Local database remains unchanged.")
-
-def sync_thread():
-    """
-    Starts the synchronization process in a background thread.
-    """
-    manager = SyncManager()
-    threading.Thread(target=manager.start_sync, daemon=True).start()
+            print("[SYNC] No peers responded. Local database unchanged.")
