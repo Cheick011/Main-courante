@@ -1,5 +1,5 @@
 # test_synchro.py
-from synchro import synchro
+from synchronisation import synchro
 
 data = {
     "utilisateurs": [

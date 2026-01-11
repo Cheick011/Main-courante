@@ -5,7 +5,8 @@
 .. module:: Envoie
    :platform: Unix, Windows
    :synopsis: Module For Sends data to others post.
-""
+.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitiers.fr>
+"""
 
 import socket
 import json
