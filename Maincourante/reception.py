@@ -60,7 +60,7 @@ class Reception(threading.Thread):
                 f"{msg['type']} / {msg['action']}"
             )
 
-            self.apply(msg)
+            self.appliquer(msg)
 
     def appliquer(self, msg):
         """
