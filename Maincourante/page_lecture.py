@@ -16,6 +16,9 @@ read-only profile. It allows users to:
 - log out of the application.
 
 No modifications to the database are allowed from this interface.
+
+.. moduleauthor:: Adja
+.. moduleauthor:: Marème
 """
 
 
