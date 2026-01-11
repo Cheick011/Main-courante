@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBa
 from PyQt5.QtGui import QIcon, QKeySequence
 from page_gestionnaire import GestionPage
 from Connexion_dataBase import connexion
+from envoie import Envoie
 
 
 class AdminPage(QMainWindow):
@@ -219,40 +220,62 @@ class AdminPage(QMainWindow):
             widget.deleteLater()
 
     def valider(self):
-      try:
-        from Connexion_dataBase import connexion
-        conn = connexion()  
-        cur = conn.cursor()
+        try:
+            conn = connexion()
+            cur = conn.cursor()
 
-        for i in range(self.__bloc_gestion_droits_lay.count()):
-            widget = self.__bloc_gestion_droits_lay.itemAt(i).widget()
-            if not hasattr(widget, "nom"):
-                continue  
-            
-            nom = widget.nom
-            mdp = widget.mdp_edit.text()
-            role = widget.combo.currentText()
+            for i in range(self.__bloc_gestion_droits_lay.count()):
+                widget = self.__bloc_gestion_droits_lay.itemAt(i).widget()
+                if not hasattr(widget, "nom"):
+                    continue
 
-            if not nom or not mdp or not role:
-                continue
+                nom = widget.nom
+                mdp = widget.mdp_edit.text()
+                role = widget.combo.currentText()
 
-            cur.execute("""
-                INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, role)
-                VALUES (%s, %s, %s)
-                ON CONFLICT (nom_utilisateur) DO UPDATE
-                SET mot_de_passe = EXCLUDED.mot_de_passe,
-                    role = EXCLUDED.role;
-            """, (nom, mdp, role))
+                if not nom or not mdp or not role:
+                    continue
+
+                #  DB locale (INSERT ou UPDATE)
+                cur.execute("""
+                    INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, role)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT (nom_utilisateur)
+                    DO UPDATE SET
+                        mot_de_passe = EXCLUDED.mot_de_passe,
+                        role = EXCLUDED.role;
+                """, (nom, mdp, role))
+
+                #  Réseau
+                Envoie.send({
+                    "type": "utilisateur",
+                    "action": "UPDATE",
+                    "payload": {
+                        "nom": nom,
+                        "mdp": mdp,
+                        "role": role
+                    }
+                })
+
+            conn.commit()
+
         
-        conn.commit()
-        QMessageBox.information(self, "Validation", "Les utilisateurs ont été enregistrés avec succès.")
-        
-      except:
-        QMessageBox.critical(self, "Erreur", "Impossible de sauvegarder les utilisateurs")
-        
-      finally:
-        cur.close()
-        conn.close()
+
+            QMessageBox.information(
+                self,
+                "Validation",
+                "Utilisateurs enregistrés et synchronisés"
+            )
+
+            #  Rafraîchir l’affichage
+            self.load_utilisateurs_from_db()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Erreur", f"Erreur sauvegarde : {e}")
+
+        finally:
+            cur.close()
+            conn.close()
 
 
     def bouton_gestion(self):

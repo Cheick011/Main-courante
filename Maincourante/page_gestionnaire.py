@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit,QMenuBa
 from PyQt5.QtGui import QIcon, QKeySequence
 from Connexion_dataBase import connexion
 from datetime import datetime
+from envoie import Envoie
 
 class GestionPage(QMainWindow):
     TITRE_FENETRE = "Page gestionnaire"
@@ -131,32 +132,78 @@ class GestionPage(QMainWindow):
 
         
     def save_modif(self):
-      try:
-        conn = connexion()
-        cur = conn.cursor()
-        for row in range(self.__bloc_tableau.rowCount()):
-          
-            date = self.__bloc_tableau.item(row, 0).text() if self.__bloc_tableau.item(row, 0) else ""
-            heure = self.__bloc_tableau.item(row, 1).text() if self.__bloc_tableau.item(row, 1) else ""
-            de = self.__bloc_tableau.item(row, 2).text() if self.__bloc_tableau.item(row, 2) else ""
-            a = self.__bloc_tableau.item(row, 3).text() if self.__bloc_tableau.item(row, 3) else ""
-            description = self.__bloc_tableau.item(row, 4).text() if self.__bloc_tableau.item(row, 4) else ""
+        try:
+            conn = connexion()
+            cur = conn.cursor()
 
-            cur.execute("""
-                INSERT INTO donnees (date, heure, de, a, descriptif)
-                VALUES (%s, %s, %s, %s, %s)
-                ON CONFLICT (id) DO UPDATE
-                SET date=EXCLUDED.date, heure=EXCLUDED.heure,
-                    de=EXCLUDED.de, a=EXCLUDED.a, descriptif=EXCLUDED.descriptif;
-            """, (date, heure, de, a, description))
-        
-        conn.commit()
-        QMessageBox.information(self, "Enregistrement", "Les modifications ont été enregistrées")
-      except:
-        QMessageBox.critical(self, "Erreur", "Impossible de sauvegarder")
-      finally:
-        cur.close()
-        conn.close()
+            for row in range(self.__bloc_tableau.rowCount()):
+
+                date = self.__bloc_tableau.item(row, 0).text()
+                heure = self.__bloc_tableau.item(row, 1).text()
+                de = self.__bloc_tableau.item(row, 2).text()
+                a = self.__bloc_tableau.item(row, 3).text()
+                descriptif = self.__bloc_tableau.item(row, 4).text()
+
+                id_item = self.__bloc_tableau.item(row, 0)
+                id_donnee = id_item.data(Qt.UserRole) if id_item else None
+
+                if id_donnee is None:
+                    #  INSERT
+                    cur.execute("""
+                        INSERT INTO donnees (date, heure, de, a, descriptif)
+                        VALUES (%s,%s,%s,%s,%s)
+                        RETURNING id
+                    """, (date, heure, de, a, descriptif))
+
+                    id_donnee = cur.fetchone()[0]
+                    id_item.setData(Qt.UserRole, id_donnee)
+
+                    action = "INSERT"
+
+                else:
+                    #  UPDATE
+                    cur.execute("""
+                        UPDATE donnees
+                        SET date=%s, heure=%s, de=%s, a=%s, descriptif=%s
+                        WHERE id=%s
+                    """, (date, heure, de, a, descriptif, id_donnee))
+
+                    action = "UPDATE"
+
+                #  Réseau
+                Envoie.send(
+                    "donnee",    # msg_type
+                    action,      # "INSERT" ou "UPDATE"
+                    {            # payload
+                        "id": id_donnee,
+                        "date": date,
+                        "heure": heure,
+                        "de": de,
+                        "a": a,
+                        "descriptif": descriptif
+                        }
+                )
+
+
+            conn.commit()
+
+
+
+            QMessageBox.information(
+                self,
+                "Enregistrement",
+                "Modifications enregistrées et synchronisées"
+            )
+
+            #  Rafraîchir tableau
+            self.load_table_from_db()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Erreur", f"Erreur sauvegarde : {e}")
+
+        finally:
+            cur.close()
+            conn.close()
 
         
     def deconnecter(self): 
