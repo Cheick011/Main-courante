@@ -3,54 +3,67 @@
 
 """
 .. module:: notification
-   :platform: Unix, windows
-   :synopsis: module pour notifier le poste à la reception de nouveau message.
-
-.. moduleauthor:: N'DIAYE Cheick Bounama Boubacar <cheick.n.diaye@etu.univ-poitier.fr>
-
-
+   :platform: Unix, Windows
+   :synopsis: Module pour notifier le système lors de la réception
+              de nouveaux messages réseau ou événements importants.
 """
 
 import platform
 import subprocess
 
-def notify_system(title, message):
-    
-   """
+
+def notif_system(title: str, message: str):
+    """
     Displays a system notification with a title and message.
 
-    This function adapts the notification mechanism depending
-    on the detected operating system:
+    - Linux   : notify-send + paplay (si disponible)
+    - Windows : win10toast + beep
+    - Autres  : affichage console
 
-    - **Linux**: uses ``notify-send`` and ``paplay``
-    - **Windows**: uses ``win10toast`` and ``winsound``
-    - **Other systems**: prints to the standard output
+    :param title: Notification title
+    :param message: Notification content
+    """
 
-    :param title: Notification title.
-    :type title: str
-    :param message: Content of the message to display.
-    :type message: str
-    :raises Exception: Any exception raised while sending the notification
-                       is caught and printed to the console.
-   """
-   os_name = platform.system().lower()
+    os_name = platform.system().lower()
 
-   try:
+    try:
+        # ===== LINUX =====
         if "linux" in os_name:
-            subprocess.Popen(["notify-send", title, message])
-            subprocess.Popen(["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"])
+            subprocess.Popen(
+                ["notify-send", title, message],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
 
+            # Son (optionnel)
+            try:
+                subprocess.Popen(
+                    ["paplay", "/usr/share/sounds/freedesktop/stereo/complete.oga"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+            except FileNotFoundError:
+                pass
+
+        # ===== WINDOWS =====
         elif "windows" in os_name:
-            from win10toast import ToastNotifier
-            toaster = ToastNotifier()
-            toaster.show_toast(title, message, duration=5)
+            try:
+                from win10toast import ToastNotifier
+                toaster = ToastNotifier()
+                toaster.show_toast(title, message, duration=5, threaded=True)
+            except Exception:
+                pass
 
-            import winsound
-            winsound.MessageBeep()
+            try:
+                import winsound
+                winsound.MessageBeep()
+            except Exception:
+                pass
 
+        # ===== AUTRES OS =====
         else:
-            print(f"[NOTIF] {title} : {message}")
+            print(f"[NOTIFICATION] {title} : {message}")
 
-   except Exception as e:
+    except Exception as e:
         print("Erreur notification :", e)
-        print(f"[NOTIF] {title} : {message}")
+        print(f"[NOTIFICATION] {title} : {message}")
