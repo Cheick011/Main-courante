@@ -29,10 +29,24 @@ from Connexion_dataBase import connexion
 
 
 class ClientPage(QMainWindow):
+   """
+    Read-only main log window.
+
+    This class implements the interface for users with read-only
+    access. Users can consult the main log entries in a table,
+    refresh the data, and disconnect from the application.
+    """
     TITRE_FENETRE = "Main Courante"
 
     
     def __init__(self): 
+         """
+    Initializes the read-only client page.
+
+    This method sets up the main window, menus, graphical layouts,
+    signal connections, and loads the current main log entries
+    from the database in read-only mode.
+    """
         super().__init__()
 
         # ===== FENETRE =====
@@ -112,14 +126,34 @@ class ClientPage(QMainWindow):
 # ================== FONCTIONS ==================
              
     def a_propos(self):
+        """
+    Displays application information.
+
+    This function shows a message box with details about the project,
+    the development context, and its authors.
+    """
+
             
       QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunications promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
     
     def lecture_seule(self):
+         """
+    Sets the main log table to read-only mode.
+
+    This function disables editing for all cells of the QTableWidget.
+    """
         self.__bloc_tableau.setEditTriggers( QTableWidget.NoEditTriggers)
 
     def actualiser(self):
-        """Recharge les données de la table 'donnees' dans le tableau lecture seule."""
+      """
+    Refreshes the main log table with the latest data from the database.
+
+    This function retrieves all entries from the 'donnees' table
+    ordered by ID and populates the table. Existing rows are reused
+    or new rows are inserted as needed.
+
+    :raises Exception: If loading data from the database fails.
+    """
         try:
             conn = connexion()
             cur = conn.cursor()
@@ -140,6 +174,12 @@ class ClientPage(QMainWindow):
 
         
     def deconnexion(self):
+        """
+    Handles logout of the read-only user.
+
+    A confirmation dialog is displayed before closing the client window.
+    """
+
         self.__rep = QMessageBox.question(
             self,
             "Déconnexion",
