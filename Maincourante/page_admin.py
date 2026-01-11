@@ -1,4 +1,5 @@
 
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -37,14 +38,13 @@ class AdminPage(QMainWindow):
     TITRE_FENETRE = "Page administrateur"
 
     def __init__(self):
-    """
-    Initializes the administrator page.
-
-    This method sets up the main window, menus, graphical layouts,
-    signal connections and loads existing users from the database.
-    """
-
-
+        
+        """
+         Initializes the administrator page.
+   
+        This method sets up the main window, menus, graphical layouts,
+        signal connections and loads existing users from the database.
+        """
         super().__init__()
         
         self.setWindowTitle("Page Admin")
@@ -136,15 +136,15 @@ class AdminPage(QMainWindow):
 
     def load_utilisateurs_from_db(self):
    
-    """
-    Loads all users from the database.
+      """
+        Loads all users from the database.
 
-    This method retrieves all user accounts stored in the PostgreSQL
-    database and displays them in the user management section
-    of the administration interface.
+        This method retrieves all user accounts stored in the PostgreSQL
+        database and displays them in the user management section
+        of the administration interface.
 
-    :raises Exception: If a database connection or query error occurs.
-    """
+        :raises Exception: If a database connection or query error occurs.
+      """
 
       try:
         conn = connexion()
@@ -171,14 +171,14 @@ class AdminPage(QMainWindow):
 
     def creer_utilisateur(self):
   
-    """
-    Creates a user entry in the administration interface.
+        """
+       Creates a user entry in the administration interface.
 
-    This method validates the username and password input fields
-    and adds a new user widget to the user management area.
+        This method validates the username and password input fields
+        and adds a new user widget to the user management area.
 
-    :raises ValueError: If the username or password field is empty.
-    """
+        :raises ValueError: If the username or password field is empty.
+        """
 
         nom = self.__lineedit_nom.text().strip()
         mdp = self.__lineedit_mdp.text().strip()
@@ -204,21 +204,21 @@ class AdminPage(QMainWindow):
         )
 
     def creer_widget_utilisateur(self, nom, mdp, role="lecteur"):
-    """
-    Creates a graphical widget representing a user account.
+        """
+         Creates a graphical widget representing a user account.
 
-    The widget allows the administrator to modify the user's password,
-    change the assigned role and delete the account.
+         The widget allows the administrator to modify the user's password,
+         change the assigned role and delete the account.
 
-    :param nom: Username.
-    :type nom: str
-    :param mdp: User password.
-    :type mdp: str
-    :param role: User role (lecteur, gestionnaire, admin).
-    :type role: str
-    :return: Configured user widget.
-    :rtype: QWidget
-    """
+         :param nom: Username.
+         :type nom: str
+         :param mdp: User password.
+         :type mdp: str
+         :param role: User role (lecteur, gestionnaire, admin).
+         :type role: str
+         :return: Configured user widget.
+         :rtype: QWidget
+        """
 
         self.__widget = QWidget()
         self.__layout = QHBoxLayout(self.__widget)
@@ -254,17 +254,17 @@ class AdminPage(QMainWindow):
         return self.__widget
 
     def supprimer(self, widget, nom):
-    """
-    Deletes a user account after confirmation.
+        """
+        Deletes a user account after confirmation.
 
-    This method displays a confirmation dialog, removes the user
-    from the database and deletes the associated widget from the interface.
+        This method displays a confirmation dialog, removes the user
+        from the database and deletes the associated widget from the interface.
 
-    :param widget: User widget to remove.
-    :type widget: QWidget
-    :param nom: Username to delete.
-    :type nom: str
-    """
+        :param widget: User widget to remove.
+        :type widget: QWidget
+        :param nom: Username to delete.
+        :type nom: str
+        """
 
         self.__reponse = QMessageBox.question(
             self,
@@ -288,15 +288,16 @@ class AdminPage(QMainWindow):
             widget.deleteLater()
 
     def valider(self):
-    """
-    Saves and synchronizes user accounts.
+        
+        """
+        Saves and synchronizes user accounts.
 
-    This method inserts or updates all user accounts displayed
-    in the interface into the local database and sends the updates
-    to other connected machines over the network.
+        This method inserts or updates all user accounts displayed
+        in the interface into the local database and sends the updates
+        to other connected machines over the network.
 
-    :raises Exception: If a database or network synchronization error occurs.
-    """
+        :raises Exception: If a database or network synchronization error occurs.
+        """
 
         try:
             conn = connexion()
@@ -356,12 +357,12 @@ class AdminPage(QMainWindow):
 
     def bouton_gestion(self):
       
-    """
-    Opens the manager page.
+        """
+        Opens the manager page.
 
-    This method closes the administration page and displays
-    the manager interface.
-    """
+        This method closes the administration page and displays
+        the manager interface.
+        """
 
         self.page_gestion = GestionPage()
         self.page_gestion.show()
@@ -369,12 +370,12 @@ class AdminPage(QMainWindow):
 
     def deconnexion(self):
 
-    """
-    Handles administrator logout.
+        """
+         Handles administrator logout.
 
-    A confirmation dialog is displayed before closing
-    the administration window.
-    """
+         A confirmation dialog is displayed before closing
+         the administration window.
+        """
 
         self.__rep = QMessageBox.question(
             self,
@@ -386,14 +387,14 @@ class AdminPage(QMainWindow):
             self.close()      
     
     def a_propos(self): 
-    """
-    Displays application information.
+        """
+        Displays application information.
 
-    This method shows a dialog containing general information
-    about the application and its development context.
-    """
+        This method shows a dialog containing general information
+        about the application and its development context.
+        """
 
-      QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunications promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
+        QMessageBox.information(self,'A propos','Cette application a été développé par un groupe de 4 étudiants en BUT2 FI Réseaux et Télécommunications promotion 2025-2026 dans le cadre de leur SAÉ "Développer des applications communicantes"')
 
 # ================== MAIN ==================
 if __name__ == "__main__":
