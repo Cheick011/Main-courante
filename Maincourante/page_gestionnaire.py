@@ -180,9 +180,9 @@ class GestionPage(QMainWindow):
 
             conn.commit()
             QMessageBox.information(self, "Enregistrement", "Modifications enregistrées et synchronisées")
-        except Exception as e:
+        except:
             conn.rollback()
-            QMessageBox.critical(self, "Erreur", f"Erreur sauvegarde : {e}")
+            QMessageBox.critical(self, "Erreur", "Erreur sauvegarde ")
         finally:
             cur.close()
             conn.close()
