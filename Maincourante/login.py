@@ -22,6 +22,7 @@ from psycopg2.extras import DictCursor
 from page_admin import AdminPage
 from page_gestionnaire import GestionPage
 from page_lecture import ClientPage
+from reception import Reception
 
 class LoginWindow(QWidget):
   
@@ -148,10 +149,16 @@ class LoginWindow(QWidget):
 
         if role == "admin":
             self.page = AdminPage()
+            recv_thread = Reception()  # Crée l’objet thread
+            recv_thread.start()
         elif role == "gestionnaire":
             self.page = GestionPage()
+            recv_thread = Reception()  # Crée l’objet thread
+            recv_thread.start()
         else:
             self.page = ClientPage()
+            recv_thread = Reception()  # Crée l’objet thread
+            recv_thread.start()
 
         self.page.show()
         self.close()
