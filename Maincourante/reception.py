@@ -2,15 +2,25 @@
 # -*- coding: utf-8 -*-
 
 """
-.. module:: notification
+.. module:: reception
    :platform: Unix, Windows
-   :synopsis: Module 
+   :synopsis:
+
+UDP network receiver module.
+
+This module defines the Reception class, responsible for listening to
+incoming UDP messages from peer machines, applying database updates,
+handling full synchronization responses, and notifying the GUI when
+data changes.
+
+Compatible with Linux and Windows.
 """
 
 import socket
 import json
 import threading
 from PyQt5.QtCore import QObject, pyqtSignal
+
 from Connexion_dataBase import connexion
 from notification import notif_system
 from config import PORT
@@ -24,35 +34,36 @@ class Reception(QObject):
 
     This class listens for incoming UDP messages from peer machines,
     applies database updates, handles full synchronization requests,
-    and notifies the graphical interface when data changes.
+    and emits signals to update the graphical interface.
     """
 
     data_changed = pyqtSignal()
 
     def __init__(self):
         """
-        Initializes the Reception object and its background thread.
+        Initialize the Reception object and its background listening thread.
         """
         super().__init__()
         self.thread = threading.Thread(target=self.run, daemon=True)
 
     def start(self):
         """
-        Starts the background UDP listening thread.
+        Start the background UDP listening thread.
         """
         self.thread.start()
 
     def run(self):
         """
-        Main listening loop.
+        Main UDP listening loop.
 
-        Receives UDP messages, decodes JSON content, sends notifications,
-        and applies the received actions to the local database.
+        Receives UDP messages, decodes JSON payloads, displays system
+        notifications, and applies received actions to the local database.
         """
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", PORT))
 
-        print(" Network listening started on port", PORT)
+        print(f"[NETWORK] Listening on UDP port {PORT}")
 
         while True:
             data, addr = sock.recvfrom(8192)
@@ -60,10 +71,10 @@ class Reception(QObject):
             try:
                 msg = json.loads(data.decode("utf-8"))
             except json.JSONDecodeError:
-                print("Invalid JSON received")
+                print("[NETWORK] Invalid JSON received")
                 continue
 
-            print(" Message received:", msg)
+            print("[NETWORK] Message received:", msg)
 
             notif_system(
                 "Network update received",
@@ -74,16 +85,16 @@ class Reception(QObject):
 
     def apply(self, msg: dict):
         """
-        Applies a received message to the local database.
+        Apply a received message to the local database.
 
         Args:
-            msg (dict): Message containing 'type', 'action', and 'payload'.
+            msg (dict): Dictionary containing 'type', 'action', and 'payload'.
         """
         msg_type = msg.get("type")
         action = msg.get("action")
         payload = msg.get("payload", {})
 
-        # ---------- FULL SYNC ----------
+        # ---------- FULL SYNCHRONIZATION ----------
         if msg_type == "sync":
             if action == "REQUEST":
                 data = self.export_database()
@@ -91,7 +102,7 @@ class Reception(QObject):
 
             elif action == "RESPONSE":
                 s = synchro()
-                s.synchro_Complete(payload)
+                s.appliquer_synchro(payload)
                 self.data_changed.emit()
 
             return
@@ -160,7 +171,7 @@ class Reception(QObject):
 
         except Exception as e:
             conn.rollback()
-            print("Network sync error:", e)
+            print("[NETWORK] Database update error:", e)
 
         finally:
             cur.close()
@@ -168,10 +179,10 @@ class Reception(QObject):
 
     def export_database(self) -> dict:
         """
-        Exports the full local database content.
+        Export the full local database content.
 
         Returns:
-            dict: Dictionary containing all users and data.
+            dict: Dictionary containing all users and all data entries.
         """
         conn = connexion()
         cur = conn.cursor()
@@ -214,4 +225,5 @@ class Reception(QObject):
         return {
             "utilisateurs": utilisateurs,
             "donnees": donnees
+        }
         }
