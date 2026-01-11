@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+.. module:: Envoie
+   :platform: Unix, Windows
+   :synopsis: Module For Sends data to others post.
+""
 
 import socket
 import json
