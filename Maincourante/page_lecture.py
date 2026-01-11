@@ -17,8 +17,8 @@ read-only profile. It allows users to:
 
 No modifications to the database are allowed from this interface.
 
-.. moduleauthor:: Adja
-.. moduleauthor:: Marème
+.. moduleauthor:: Adja Diarietou Mbengue <adja.diarietou.mbengue@etu.univ-poitiers.fr>
+.. moduleauthor:: Marème Mboup <mareme.mboup@etu.univ-poitiers.fr>
 """
 
 
